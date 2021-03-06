@@ -25,7 +25,8 @@ const validate = (inputs) => {
   }
 
   //Role Errors
-  if (!inputs.role || (inputs !== 'owner' && inputs !== 'walker')){
+  const roles = ['owner', 'walker'];
+  if (!inputs.role || roles.indexOf(inputs.role) === -1 ){
     errors.role = "Select a role"
   }
 
