@@ -1,16 +1,6 @@
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  margin: 0 10px;
 }
 
 .App-header {
@@ -35,4 +25,24 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.custom-card{
+  min-width: 20% !important;
+  max-width: 20% !important;
+  margin: 15px 0;
+}
+
+.details {
+  margin-top: 10%;
+}
+
+.registrationBox{
+  margin-top: 1%;
+  padding: 2% 0;
+}
+
+.formError{
+  color: darkred;
+  font-size: 12px;
 }

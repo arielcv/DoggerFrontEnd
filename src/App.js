@@ -1,23 +1,26 @@
-import logo from './logo.svg';
+import {Route} from 'react-router-dom'
+import React,{useState} from "react";
+
+import DashboardCards from "./components/dashboardCards";
+import NavBar from "./components/navBar";
+import LoginForm from "./components/loginForm";
+import Registration from "./components/registration";
+
+import "bootstrap/dist/css/bootstrap.min.css"
+import 'react-widgets/dist/css/react-widgets.css';
+import 'font-awesome/css/font-awesome.css'
 import './App.css';
 
 function App() {
+
+  const [user,setUser] = useState(localStorage.getItem('user'))
+  // const [user, setUser] = useState('Ariel')
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <NavBar user = {user}/>
+      <Route path = '/walkers' component = {DashboardCards} />
+      <Route path = '/registration' component = {Registration}/>
+      <Route path = '/login' component = {LoginForm}/>
     </div>
   );
 }
