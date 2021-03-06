@@ -1,7 +1,9 @@
-import React,{useState} from 'react';
+import React, {useState} from 'react';
 import {Link} from "react-router-dom";
+import axios from 'axios'
+import baseURL from '../config'
 
-function LoginForm(props) {
+function LoginForm({setUser, ...props}) {
 
   const [state, setState] = useState({
     username: "",
@@ -16,19 +18,40 @@ function LoginForm(props) {
     }))
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Logged");
-    localStorage.setItem('user', state.username);
-    window.location = ["/"]
+    try {
+      const {data} = await axios.post(baseURL.urlAPI + 'login/', {
+        'username': state.username,
+        'password': state.password
+      });
+      setUser(state.username);
+      const token = `Token ${data.token}`;
+      localStorage.setItem('Authorization', token);
+      props.history.replace('/');
+    } catch (e) {
+      console.log(e);
+      if (e.response.status >= 400 && e.response.status < 500) {
+        alert("Incorrect user or password")
+      } else {
+        alert("There was an error in the server")
+      }
+    }
+    // if (response.status === 200){
+    //   console.log(response)
+    // } else {
+    //   console.log(response)
+    // }
+    // localStorage.setItem('user', state.username);
+    // window.location = "/"
   };
 
   return (
     <div className="text-center justify-content-center align-items-center" style={{display: 'flex'}}>
       <div className="col-3 card registrationBox align-items-center">
         <div className="form-group">
-          <label htmlFor="email">Email address:</label>
-          <input type="email"
+          <label htmlFor="username">Username:</label>
+          <input type="text"
                  className="form-control"
                  id="username"
                  value={state.username}
@@ -48,7 +71,7 @@ function LoginForm(props) {
         <Link to='registration'><a> If you have not account, create one here!</a></Link>
       </div>
     </div>
-);
+  );
 }
 
 export default LoginForm;

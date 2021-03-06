@@ -1,11 +1,11 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
 
-function NavBar({user}) {
+function NavBar({user, setUser}) {
 
   const handleLogout = () => {
     localStorage.removeItem('user');
-    window.location = '/'
+    setUser('')
   };
 
   return (

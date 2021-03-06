@@ -1,16 +1,21 @@
 import React from 'react';
 import useForm from '../hooks/useForm'
 import {Link} from 'react-router-dom'
+import {toast} from "react-toastify";
 
 export default function Registration(props) {
 
-  const {inputs, handleInputChange, handleSubmit, errors} = useForm(
-    {username: '', email: '', password: '', repeatPassword: ''});
+  const {inputs, handleInputChange, handleSubmit , errors} = useForm(
+    {username: '', email: '', password: '', role: '', repeatPassword: ''});
 
-  const handleButton = (e) => {
+  const handleButton = async (e) => {
     e.preventDefault();
-    console.log("Button Pressed");
-    handleSubmit()
+    if (await handleSubmit()) {
+      toast.success('User created successfully');
+      props.history.replace('/login')
+    } else {
+      toast.error('There was error(s) creating your user');
+    }
   };
 
   return (
@@ -58,7 +63,7 @@ export default function Registration(props) {
           />
         </div>
 
-        <div className="form-row">
+        <div style={{width: "80%"}}>
           <label htmlFor="userType">Choose your user type</label>
           <form
             className="form-control justify-content-center align-items-center align-content-md-center"
@@ -66,25 +71,26 @@ export default function Registration(props) {
             value={inputs.repeatPassword}
             onChange={handleInputChange}
           >
-            <div className='form-row justify-content-around'>
+            <div className='form-row justify-content-around' onChange={handleInputChange}>
               <div>
-                <input type="radio" name="userType" value="owner" checked/> Owner
+                <input type="radio" id='role' name="userType" value="owner"/> Owner
               </div>
               <div>
-                <input type="radio" name="userType" value="walker" checked/> Walker
+                <input type="radio" id='role' name="userType" value="walker"/> Walker
               </div>
             </div>
           </form>
+          {errors.role && <p className='formError'>{errors.role}</p>}
         </div>
 
         <button className="btn btn-primary"
                 style={{maxWidth: '50%'}}
-                onClick={handleSubmit}
+                onClick={handleButton}
         >
           Register
         </button>
         <Link to='login'><a> If you already have an account click here!</a> </Link>
       </div>
     </div>
-);
+  );
 }

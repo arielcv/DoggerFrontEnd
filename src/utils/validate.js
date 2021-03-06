@@ -1,10 +1,12 @@
 const validate = (inputs) => {
-  //Email errors
+
+  //User errors
   const errors = {};
   if (!inputs.username) {
     errors.username = "Username is required"
   }
 
+  //Email errors
   if (!inputs.email) {
     errors.email = 'Email is required';
   } else if (
@@ -12,6 +14,7 @@ const validate = (inputs) => {
   ) {
     errors.email = 'Invalid email address';
   }
+
   //Password Errors
   if (!inputs.password) {
     errors.password = 'Password is required'
@@ -20,6 +23,12 @@ const validate = (inputs) => {
   } else if (inputs.password !== inputs.repeatPassword) {
     errors.password = "The passwords doesn't match"
   }
+
+  //Role Errors
+  if (!inputs.role || (inputs !== 'owner' && inputs !== 'walker')){
+    errors.role = "Select a role"
+  }
+
   return errors;
 };
 export default validate;
