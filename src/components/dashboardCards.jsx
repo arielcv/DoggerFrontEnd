@@ -1,9 +1,18 @@
-import React from 'react';
+import React, {useState,useEffect} from 'react';
 import WalkerCard from "./walkerCard";
 import WalkerDetails from "./walkerDetails";
 
+import {getWalkers} from '../utils/services'
+
+
 function DashboardCards(props) {
-  const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const [walkers, setWalkers] = useState([]);
+
+  useEffect(async () => {
+    const {data} = await getWalkers();
+    setWalkers(data);
+    console.log(data);
+  }, []);
 
   return (
     <div className="App row">
@@ -12,7 +21,7 @@ function DashboardCards(props) {
       </div>
       <div className="col-8">
         <div className="card-deck">
-          {cards.map(card => <WalkerCard/>)}
+          {walkers.map(card => <WalkerCard/>)}
         </div>
       </div>
     </div>

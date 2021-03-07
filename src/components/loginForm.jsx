@@ -20,12 +20,14 @@ function LoginForm({setUser, ...props}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const {username, password} = state;
     try {
       const {data} = await axios.post(baseURL.urlAPI + 'login/', {
-        'username': state.username,
-        'password': state.password
+        'username': username,
+        'password': password
       });
-      setUser(state.username);
+      setUser(username);
+      localStorage.setItem('user', username);
       const token = `Token ${data.token}`;
       localStorage.setItem('Authorization', token);
       props.history.replace('/');
@@ -37,13 +39,6 @@ function LoginForm({setUser, ...props}) {
         alert("There was an error in the server")
       }
     }
-    // if (response.status === 200){
-    //   console.log(response)
-    // } else {
-    //   console.log(response)
-    // }
-    // localStorage.setItem('user', state.username);
-    // window.location = "/"
   };
 
   return (

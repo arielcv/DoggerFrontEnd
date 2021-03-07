@@ -5,7 +5,9 @@ function NavBar({user, setUser}) {
 
   const handleLogout = () => {
     localStorage.removeItem('user');
-    setUser('')
+    setUser('');
+    localStorage.removeItem('Authorization');
+    window.location = '/'
   };
 
   return (
