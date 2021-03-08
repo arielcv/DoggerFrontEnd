@@ -8,3 +8,11 @@ export const getWalkers = async () => {
     }
   })
 };
+
+export const getProfileDetails = async (user) => {
+  return await axios.get(baseURL.urlAPI + 'users/' + user, {
+    headers: {
+      'Authorization': `${localStorage.getItem('Authorization')}`
+    }
+  })
+};

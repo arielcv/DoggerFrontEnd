@@ -1,12 +1,20 @@
-import React from 'react';
+import React, {useState} from 'react';
 
-function WalkerCard(props) {
+function WalkerCard({data, handleSelection}) {
+
+  const [over, setOver] = useState(false);
+
+
   return (
-    <div className="card custom-card">
-      <div className="card-title"> This is the title </div>
-      <div className="card-header"> This is the header </div>
-      <div className="card-body"> This is the body </div>
-      <div className="card-footer"> This is the footer </div>
+    <div className={`card custom-card ${(over)? "borderTrue" : ""}`}
+         onClick={handleSelection}
+         onMouseOver={() => (setOver(true))}
+         onMouseLeave={() => (setOver(false))}
+    >
+      <div className="card-title"> {data.name}</div>
+      <div className="card-header"> {data.email}</div>
+      {data.bio && <div className="card-body"> {data.bio}</div>}
+      {data.birthdate && <div className="card-footer"> {data.birthdate}</div>}
     </div>
   );
 }

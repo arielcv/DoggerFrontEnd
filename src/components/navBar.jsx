@@ -6,6 +6,7 @@ function NavBar({user, setUser}) {
   const handleLogout = () => {
     localStorage.removeItem('user');
     setUser('');
+    console.log("Logged out");
     localStorage.removeItem('Authorization');
     window.location = '/'
   };
@@ -14,7 +15,7 @@ function NavBar({user, setUser}) {
     <nav className="navbar navbar-expand-sm bg-light">
       <ul className="navbar-nav">
         <li className="nav-item">
-          <a className="nav-link" href="#">My Profile</a>
+          <a className="nav-link" href="/profile">My Profile</a>
         </li>
         <li className="nav-item">
           <a className="nav-link" href="#">My dogs</a>

@@ -1,48 +1,66 @@
 .App {
-  text-align: center;
-  margin: 0 10px;
+    text-align: center;
+    margin: 0 10px;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
 }
 
 .App-link {
-  color: #61dafb;
+    color: #61dafb;
 }
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
-.custom-card{
-  min-width: 20% !important;
-  max-width: 20% !important;
-  margin: 15px 0;
+.custom-card {
+    min-width: 20% !important;
+    max-width: 20% !important;
+    margin: 15px 0;
 }
 
 .details {
-  margin-top: 10%;
+    margin-top: 10%;
 }
 
-.registrationBox{
-  margin-top: 1%;
-  padding: 2% 0;
+.registrationBox {
+    margin-top: 1%;
+    padding: 2% 0;
 }
 
-.formError{
-  color: darkred;
-  font-size: 12px;
+.formError {
+    color: darkred;
+    font-size: 12px;
+}
+
+.profileContainer {
+    margin: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.profileInside {
+    max-width: 90%;
+    min-width: 60%
+}
+
+.borderTrue {
+    outline: #61dafb solid 4px;
+    -moz-outline-radius: 10px;
 }
