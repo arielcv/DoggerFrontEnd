@@ -12,7 +12,7 @@ function WalkerCard({data, handleSelection}) {
          onMouseLeave={() => (setOver(false))}
     >
       <div className="card-title"> {data.name}</div>
-      <div className="card-header"> {data.email}</div>
+      <div className="card-header d-inline-flex"> {data.email}</div>
       {data.bio && <div className="card-body"> {data.bio}</div>}
       {data.birthdate && <div className="card-footer"> {data.birthdate}</div>}
     </div>

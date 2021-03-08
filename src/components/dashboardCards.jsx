@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import WalkerCard from "./walkerCard";
-import WalkerDetails from "./walkerDetails";
+import WalkerRender from "./walkerRender";
 
 import {getWalkers} from '../utils/services'
 
@@ -22,7 +22,7 @@ function DashboardCards(props) {
   return (
     <div className="App row">
       <div className="col-4">
-        <WalkerDetails data={selectedWalker}/>
+        <WalkerRender data={selectedWalker}/>
       </div>
       <div className="col-8">
         <div className="card-deck">
