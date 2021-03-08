@@ -16,3 +16,11 @@ export const getProfileDetails = async (user) => {
     }
   })
 };
+
+export const getDogsByOwner = async (user) => {
+  return await axios.get(baseURL.urlAPI + 'dogs/owner/' + user, {
+    headers: {
+      'Authorization': `${localStorage.getItem('Authorization')}`
+    }
+  })
+};

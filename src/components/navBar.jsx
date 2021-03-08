@@ -7,8 +7,6 @@ function NavBar({user, setUser}) {
     localStorage.removeItem('user');
     setUser('');
     console.log("Logged out");
-    localStorage.removeItem('Authorization');
-    window.location = '/'
   };
 
   return (
@@ -18,7 +16,7 @@ function NavBar({user, setUser}) {
           <a className="nav-link" href="/profile">My Profile</a>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="#">My dogs</a>
+          <a className="nav-link" href="/dogs">My dogs</a>
         </li>
         <li className="nav-item">
           <a className="nav-link" href="/walkers">Walkers</a>

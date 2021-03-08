@@ -1,7 +1,7 @@
 import {Route, Redirect} from 'react-router-dom'
 import React, {useState} from "react";
 
-import DashboardCards from "./components/dashboardCards";
+import DashboardWalkers from "./components/dashboardWalkers";
 import NavBar from "./components/navBar";
 import LoginForm from "./components/loginForm";
 import Registration from "./components/registration";
@@ -13,6 +13,7 @@ import 'react-widgets/dist/css/react-widgets.css';
 import "react-toastify/dist/ReactToastify.css"
 import 'font-awesome/css/font-awesome.css'
 import './App.css';
+import DashboardDogs from "./components/dashboardDogs";
 
 function App() {
 
@@ -26,7 +27,12 @@ function App() {
       <Route path='/profile' render={(props) => {
         return user ? <Profile user = {user}/> : <Redirect to='/login'/>
       }}/>
-      <Route path='/walkers' component={DashboardCards}/>
+      <Route path='/dogs' render={(props) => {
+        return user ? <DashboardDogs user = {user}/> : <Redirect to='/login'/>
+      }}/>
+      <Route path='/walkers' render={(props) => {
+        return user ? <DashboardWalkers/> : <Redirect to='/login'/>
+      }}/>
       <Route path='/registration' component={Registration}/>
       <Route path='/login' render={(props) => (
         <LoginForm {...props} setUser={setUser}/>

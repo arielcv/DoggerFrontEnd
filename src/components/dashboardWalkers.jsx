@@ -5,7 +5,7 @@ import WalkerRender from "./walkerRender";
 import {getWalkers} from '../utils/services'
 
 
-function DashboardCards(props) {
+function DashboardWalkers(props) {
   const [walkers, setWalkers] = useState([]);
   const [selectedWalker, setSelectedWalker] = useState(null);
 
@@ -38,4 +38,4 @@ function DashboardCards(props) {
   );
 }
 
-export default DashboardCards;
+export default DashboardWalkers;

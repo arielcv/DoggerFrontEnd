@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {getProfileDetails} from "../utils/services";
+import Alert from 'react-bootstrap/Alert'
 
 function Profile({user}) {
 
@@ -26,7 +27,9 @@ function Profile({user}) {
           </div>
         </div>
         <div className="card-body">
-
+          <Alert variant="primary" style={{textAlign:"center"}}>
+            <Alert.Heading>You are a dog {role}</Alert.Heading>
+          </Alert>
           <div className="form-group">
             <label htmlFor="username">Bio</label>
             <textarea rows = {5}
@@ -50,7 +53,7 @@ function Profile({user}) {
           <button className="btn btn-primary"
                   style={{maxWidth: '50%'}}
           >
-            Register
+            Save changes
           </button>
         </div>
       </div>
