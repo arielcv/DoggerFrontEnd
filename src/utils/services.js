@@ -24,3 +24,14 @@ export const getDogsByOwner = async (user) => {
     }
   })
 };
+
+export const createDog = async ({owner, name, size}) => {
+  return await axios.post(baseURL.urlAPI + 'dogs/',
+    {owner, name, size},
+    {
+      headers: {
+        'Authorization': `${localStorage.getItem('Authorization')}`
+      }
+    }
+  )
+};

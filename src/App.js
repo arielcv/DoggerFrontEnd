@@ -27,8 +27,8 @@ function App() {
       <Route path='/profile' render={(props) => {
         return user ? <Profile user = {user}/> : <Redirect to='/login'/>
       }}/>
-      <Route path='/dogs' render={(props) => {
-        return user ? <DashboardDogs user = {user}/> : <Redirect to='/login'/>
+      <Route exact path='/dogs' render={(props) => {
+        return user ? <DashboardDogs history = {props.history} user = {user}/> : <Redirect to='/login'/>
       }}/>
       <Route path='/walkers' render={(props) => {
         return user ? <DashboardWalkers/> : <Redirect to='/login'/>
