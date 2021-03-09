@@ -50,7 +50,7 @@ function DashboardDogs(props) {
           aria-controls="example-collapse-text"
           aria-expanded={adding}
         >
-          Add a dog
+          {(adding) ? "Return" : "Add a dog"}
         </button>
         <Collapse in={adding}>
           <div>

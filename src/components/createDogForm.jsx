@@ -17,7 +17,7 @@ function CreateDogForm({user: owner, addDog}) {
     if (errorArray) {
       setErrors(errorArray);
     } else {
-      setData({name: '', size: '', owner});
+      setData({name: '', size: 'small', owner});
     }
   };
 
@@ -48,7 +48,8 @@ function CreateDogForm({user: owner, addDog}) {
         <div style={{minWidth: '30%', margin: '1%'}}>
           <div className="form-group">
             <label htmlFor="size">Select size:</label>
-            <select className="form-control" id="size" onChange={handleChange}>
+            <select className="form-control" id="size" onChange={handleChange} defaultValue={''}>
+              <option disabled/>
               <option value={'small'}>Small</option>
               <option value={'medium'}>Medium</option>
               <option value={'large'}>Large</option>
