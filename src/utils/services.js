@@ -1,6 +1,14 @@
 import axios from 'axios'
 import baseURL from "../config";
 
+
+export const login = async (user, password) => {
+  return await axios.post(baseURL.urlAPI + 'login/', {
+    'username': user,
+    'password': password
+  });
+};
+
 export const getWalkers = async () => {
   return await axios.get(baseURL.urlAPI + 'walkers/', {
     headers: {

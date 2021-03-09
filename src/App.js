@@ -20,6 +20,10 @@ function App() {
   toast.configure();
   const [user, setUser] = useState(localStorage.getItem('user'));
 
+  const handleLogin = async (username) => {
+    setUser(username)
+  };
+
   return (
     <div>
       <ToastContainer/>
@@ -35,7 +39,7 @@ function App() {
       }}/>
       <Route path='/registration' component={Registration}/>
       <Route path='/login' render={(props) => (
-        <LoginForm {...props} setUser={setUser}/>
+        <LoginForm {...props} handleLogin = {handleLogin}/>
       )}/>
     </div>
   );

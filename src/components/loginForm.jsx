@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {Link} from "react-router-dom";
-import axios from 'axios'
-import baseURL from '../config'
+import {login} from "../utils/services";
 
 function LoginForm({setUser, ...props}) {
 
@@ -22,11 +21,8 @@ function LoginForm({setUser, ...props}) {
     e.preventDefault();
     const {username, password} = state;
     try {
-      const {data} = await axios.post(baseURL.urlAPI + 'login/', {
-        'username': username,
-        'password': password
-      });
-      setUser(username);
+      const {data} = await login(username, password);
+      props.handleLogin(username);
       localStorage.setItem('user', username);
       const token = `Token ${data.token}`;
       localStorage.setItem('Authorization', token);
@@ -38,6 +34,7 @@ function LoginForm({setUser, ...props}) {
       } else {
         alert("There was an error in the server")
       }
+      return null
     }
   };
 
