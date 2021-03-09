@@ -64,3 +64,8 @@
     outline: #61dafb solid 4px;
     -moz-outline-radius: 10px;
 }
+
+.dogCards{
+    max-width: 60%;
+    margin: auto;
+}

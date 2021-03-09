@@ -11,15 +11,15 @@ function NavBar({user, setUser}) {
 
   return (
     <nav className="navbar navbar-expand-sm bg-light">
-      <ul className="navbar-nav">
-        <li className="nav-item">
-          <a className="nav-link" href="/profile">My Profile</a>
+      <ul className="navbar-nav flex-row">
+        <li className="nav-item col-6">
+          <Link to={'/profile'}>My Profile</Link>
         </li>
-        <li className="nav-item">
-          <a className="nav-link" href="/dogs">My dogs</a>
+        <li className="nav-item col-6">
+          <Link to={"/dogs"}>My dogs</Link>
         </li>
-        <li className="nav-item">
-          <a className="nav-link" href="/walkers">Walkers</a>
+        <li className="nav-item col-6">
+          <Link to={"/walkers"} >Walkers</Link>
         </li>
       </ul>
       <ul className="nav navbar-nav justify-content-end align-content-around" style={{width: '80%'}}>
@@ -29,7 +29,8 @@ function NavBar({user, setUser}) {
         </li>
         <li>
           {user ? <a className='fa fa-power-off'
-                     style={{'margin-left':'10px', cursor:'pointer'
+                     style={{
+                       'marginLeft': '10px', cursor: 'pointer'
                      }}
                      onClick={() => handleLogout()}
           > Log off</a> : null}

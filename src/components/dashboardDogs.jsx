@@ -3,7 +3,7 @@ import {getDogsByOwner} from "../utils/services";
 import DogCard from './dogCard'
 import CreateDogForm from "./createDogForm";
 import {Collapse} from "react-bootstrap";
-import {createDog} from "../utils/services"
+import {createDog, updateDog, deleteDog} from "../utils/services"
 
 function DashboardDogs(props) {
   const [dogs, setDogs] = useState([]);
@@ -13,6 +13,7 @@ function DashboardDogs(props) {
     try {
       const {data} = await getDogsByOwner(props.user);
       setDogs(data);
+      console.log('Use effect')
     } catch (e) {
       console.log(e.response.status);
     }
@@ -29,17 +30,48 @@ function DashboardDogs(props) {
       return {}
     } catch (e) {
       return e.response.data;
-      // Object.keys(errorArray).map((error) => toast.error(`There was a problem with the field ${error}: ${errorArray[error]}`))
+    }
+  };
+
+  const handleEditDog = async (data) => {
+    console.log(data);
+    try {
+      const response = await updateDog(data);
+      console.log(response.data);
+      const arrayDogs = [...dogs, data];
+      setDogs(arrayDogs);
+      setAdding(false);
+      return {}
+    } catch (e) {
+      return e.response.data;
+    }
+  };
+
+  const handleDelete = async (id) => {
+    console.log(id);
+    try {
+      const response = await deleteDog(id);
+      console.log(response.data);
+      const arrayDogs = dogs.filter((dog) => dog.id !== id);
+      setDogs(arrayDogs);
+      setAdding(false);
+      return {}
+    } catch (e) {
+      return e.response.data;
     }
   };
 
   return (
-    <div style={{maxWidth: '60%', margin: 'auto'}}>
-      <div className="card-deck">
+    <div className='dogCards'>
+      <div className="card-deck d-inline-block" style={{width:'100%'}}>
         {dogs.map(dog => <DogCard
-            key={dog.user}
+            key={dog.id}
+            id = {dog.id}
+            owner={props.user}
             name={dog.name}
             size={dog.size}
+            editDog={handleEditDog}
+            deleteDog={handleDelete}
           />
         )}
       </div>
@@ -54,7 +86,7 @@ function DashboardDogs(props) {
         </button>
         <Collapse in={adding}>
           <div>
-            <CreateDogForm user={props.user} addDog={handleAddDog}/>
+            <CreateDogForm owner={props.user} createForm={true} addDog={handleAddDog}/>
           </div>
         </Collapse>
       </div>

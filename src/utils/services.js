@@ -35,3 +35,24 @@ export const createDog = async ({owner, name, size}) => {
     }
   )
 };
+
+export const updateDog = async ({id, name, size}) => {
+  return await axios.post(baseURL.urlAPI + 'dogs/' + id + '/',
+    {name, size},
+    {
+      headers: {
+        'Authorization': `${localStorage.getItem('Authorization')}`
+      }
+    }
+  )
+};
+
+export const deleteDog = async (id) => {
+  return await axios.delete(baseURL.urlAPI + 'dogs/' + id + '/',
+    {
+      headers: {
+        'Authorization': `${localStorage.getItem('Authorization')}`
+      }
+    }
+  )
+};
