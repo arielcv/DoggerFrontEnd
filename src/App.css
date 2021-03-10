@@ -33,8 +33,9 @@
     margin: 15px 0;
 }
 
-.details {
+.walker-details {
     margin-top: 10%;
+    margin-bottom: 5%;
 }
 
 .registrationBox {
@@ -63,6 +64,7 @@
 .borderTrue {
     outline: #61dafb solid 4px;
     -moz-outline-radius: 10px;
+    cursor:pointer;
 }
 
 .dogCards{
