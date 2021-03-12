@@ -18,16 +18,20 @@ import DashboardDogs from "./components/dashboardDogs";
 function App() {
 
   toast.configure();
-  const [user, setUser] = useState(localStorage.getItem('user'));
+  const [user, setUser] = useState('');
 
-  const handleLogin = async (username) => {
-    setUser(username)
+  const handleLogin = (userData) => {
+    setUser(userData)
+  };
+
+  const handleLogout = () => {
+    setUser('')
   };
 
   return (
     <div>
       <ToastContainer/>
-      <NavBar user={user} setUser={setUser}/>
+      <NavBar user={user} logout={handleLogout}/>
       <Route path='/profile' render={(props) => {
         return user ? <Profile user = {user}/> : <Redirect to='/login'/>
       }}/>

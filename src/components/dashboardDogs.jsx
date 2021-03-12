@@ -11,7 +11,7 @@ function DashboardDogs(props) {
 
   useEffect(async () => {
     try {
-      const {data} = await getDogsByOwner(props.user);
+      const {data} = await getDogsByOwner(props.user.name);
       setDogs(data);
       console.log('Use effect')
     } catch (e) {

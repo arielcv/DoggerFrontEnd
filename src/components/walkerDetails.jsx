@@ -4,6 +4,7 @@ import momentLocalizer from "react-widgets-moment";
 import DateTimePicker from "react-widgets/lib/DateTimePicker";
 import {Collapse} from 'react-bootstrap'
 import {toast} from "react-toastify";
+import {sendReservationByWalker} from '../utils/services'
 
 Moment.locale('en');
 momentLocalizer();
@@ -42,11 +43,21 @@ function WalkerDetails({data}) {
     return Object.keys(errorArray).length;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validate(dateTime)) {
       toast.error('There are some errors in your reservation');
     } else {
-
+      try {
+        const response = await sendReservationByWalker(data.user, dateTime.start, dateTime.end);
+        const {start, end} = response.data;
+        console.log('Here');
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+        console.log(start, end);
+        console.log(startDate, endDate);
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 

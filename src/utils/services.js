@@ -3,10 +3,17 @@ import baseURL from "../config";
 
 
 export const login = async (user, password) => {
-  return await axios.post(baseURL.urlAPI + 'login/', {
-    'username': user,
-    'password': password
-  });
+  try{
+    const {data} = await axios.post(baseURL.urlAPI + 'login/', {
+      'username': user,
+      'password': password
+    });
+    const token = `Token ${data.token}`;
+    localStorage.setItem('Authorization', token);
+    return await getProfileDetails(user)
+  }catch (e) {
+    console.log('Error')
+  }
 };
 
 export const getWalkers = async () => {
@@ -64,3 +71,14 @@ export const deleteDog = async (id) => {
     }
   )
 };
+
+export const sendReservationByWalker = async (walkerId, start, end) => {
+  return await axios.post(baseURL.urlAPI + 'walkers/' + walkerId + '/' + 'reservation/',
+    {start, end},
+    {
+      headers: {
+        'Authorization': `${localStorage.getItem('Authorization')}`
+      }
+    }
+  )
+}

@@ -22,10 +22,8 @@ function LoginForm({setUser, ...props}) {
     const {username, password} = state;
     try {
       const {data} = await login(username, password);
-      props.handleLogin(username);
-      localStorage.setItem('user', username);
-      const token = `Token ${data.token}`;
-      localStorage.setItem('Authorization', token);
+      console.log(data);
+      props.handleLogin(data);
       props.history.replace('/');
     } catch (e) {
       console.log(e);

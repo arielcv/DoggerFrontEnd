@@ -1,17 +1,11 @@
-import React, {useState, useEffect} from 'react';
-import {getProfileDetails} from "../utils/services";
+import React, {useState} from 'react';
 import Alert from 'react-bootstrap/Alert'
 
 function Profile({user}) {
 
-  const [{email, role, name, bio, birthDate}, setDataProfile] = useState([]);
+  const [dataProfile, setDataProfile] = useState(user);
   const [errors, setErrors] = useState({});
 
-  useEffect(async () => {
-    const {data} = await getProfileDetails(user);
-    setDataProfile(data);
-    console.log(data);
-  }, []);
 
   return (
     <div className="profileContainer">
@@ -19,23 +13,23 @@ function Profile({user}) {
         <div className="card-header">
           <div className="card-title">
             <h1>
-              {user}
+              {user.name}
             </h1>
             <h2>
-              {email}
+              {user.email}
             </h2>
           </div>
         </div>
         <div className="card-body">
           <Alert variant="primary" style={{textAlign:"center"}}>
-            <Alert.Heading>You are a dog {role}</Alert.Heading>
+            <Alert.Heading>You are a dog {user.role}</Alert.Heading>
           </Alert>
           <div className="form-group">
             <label htmlFor="username">Bio</label>
             <textarea rows = {5}
                    className="form-control"
                    id="bio"
-                   value={bio}
+                   value={user.bio}
             />
           </div>
           {/*{errors.username && <p className='formError'>{errors.username}</p>}*/}
@@ -45,7 +39,7 @@ function Profile({user}) {
             <input type="date"
                    className="form-control"
                    id="birthdate"
-                   value={birthDate}
+                   value={user.birthDate}
             />
           </div>
           {/*{errors.username && <p className='formError'>{errors.username}</p>}*/}
