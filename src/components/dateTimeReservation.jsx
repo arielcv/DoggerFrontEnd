@@ -1,12 +1,14 @@
-import React,{useState} from 'react';
+import React, {useState} from 'react';
 import {Collapse} from "react-bootstrap";
 import DateTimePicker from "react-widgets/lib/DateTimePicker";
 import {toast} from "react-toastify";
-import {sendReservationByWalker} from "../utils/services";
+import {Link} from 'react-router-dom'
+import {sendReservationByWalker, sendReservationToAll} from "../utils/services";
+import SelectDog from "./selectDog";
 
-function DateTimeReservation(props) {
+function DateTimeReservation({walker, dogs, submitText, target, ...props}) {
   const [mode, setMode] = useState(false);
-  const [dateTime, setDateTime] = useState({start: null, end: null});
+  const [reservation, setReservation] = useState({start: null, end: null, selectedDog: null});
   const [errors, setErrors] = useState({start: "", end: ""});
 
   const handleStart = value => {
@@ -19,44 +21,82 @@ function DateTimeReservation(props) {
     handleInput(value, 'end');
   };
 
-  const handleInput = (value, field) => {
-    const current = dateTime;
-    current[field] = value;
-    setDateTime(current);
-    validate(dateTime);
+  const handleDog = (dog) => {
+    console.log(dog);
+    handleInput(dog, 'selectedDog');
   };
 
-  const validate = dateTime => {
+  const handleInput = (value, field) => {
+    const current = reservation;
+    current[field] = value;
+    setReservation(current);
+    validate(reservation);
+  };
+
+  const validate = () => {
     const errorArray = {};
-    if (!dateTime.start) {
+    if (!reservation.start) {
       errorArray.start = 'True';
     }
-    if (!dateTime.end) {
+    if (!reservation.end) {
       errorArray.end = 'True';
+    }
+    if (!reservation.selectedDog) {
+      errorArray.selectedDog = 'True';
     }
     setErrors(errorArray);
     return Object.keys(errorArray).length;
   };
 
-  const handleSubmit = async() => {
-    if (validate(dateTime)) {
-      toast.error('There are some errors in your reservation');
-    } else {
-      try{
-        const response = await sendReservationByWalker(dateTime.start, dateTime.end);
-        const {start, end} = {start: "2021-03-18T12:30:00Z", end: "2021-03-19T17:30:00Z"};
-        console.log('Here');
-        console.log(Date(start));
-        console.log(Date(end));
-      }catch (e) {
-        console.log(e.response.status);
+  const handleSubmit = async () => {
+      if (validate(reservation)) {
+        toast.error('There are some errors in your reservation');
+      } else {
+
+        if (target === 'multiple') {
+          try {
+            console.log(target);
+            const response = await sendReservationToAll(reservation.start, reservation.end, reservation.selectedDog);
+            const {start, end} = response.data;
+            const startDate = new Date(start);
+            const endDate = new Date(end);
+            toast.success("Your reservation was send to the walker");
+            setReservation({start: null, end: null, selectedDog: null});
+            setMode(false);
+          } catch
+            (e) {
+            if (e.response.status === '406') {
+              toast.error("The walker can't accept your reservation");
+            } else {
+              toast.error("Server error");
+            }
+          }
+        } else if (target === 'single') {
+          try {
+            console.log(target);
+            const response = await sendReservationByWalker(walker,reservation.start, reservation.end, reservation.selectedDog);
+            const {start, end} = response.data;
+            const startDate = new Date(start);
+            const endDate = new Date(end);
+            toast.success("Your reservation was send to the walker");
+            setReservation({start: null, end: null, selectedDog: null});
+            setMode(false);
+          } catch
+            (e) {
+            if (e.response.status === '406') {
+              toast.error("The walker can't accept your reservation")
+            } else {
+              toast.error("Server error")
+            }
+          }
+        }
       }
     }
-  };
+  ;
 
   return (
-    <div className='card' style={{margin:'5% 0'}}>
-      <div className='card-header'>
+    <div className='card walker-details'>
+      <div>
         <button
           className='btn btn-outline-success'
           style={{width: '100%'}}
@@ -64,7 +104,7 @@ function DateTimeReservation(props) {
           aria-controls="example-collapse-text"
           aria-expanded={mode}
         >
-          Request an dog walker during a time
+          {`${submitText}`}
         </button>
       </div>
       <Collapse in={mode}>
@@ -99,8 +139,15 @@ function DateTimeReservation(props) {
           </div>
           {errors.end && <div className='formError'>{`The end datetime is required`}</div>}
 
+          <div className="form-group">
+            {(dogs) ? <SelectDog dogs={dogs} selectDog={handleDog}/> :
+              <div><h1>You have not dogs</h1><Link to={'/dogs'}>Create one</Link></div>}
+
+          </div>
+          {errors.selectedDog && <div className='formError'>{`Select a dog`}</div>}
+
           <button className="btn btn-sm btn-primary"
-                  style={{margin:'3%'}}
+                  style={{margin: '3%'}}
                   onClick={(datetime) => handleSubmit(datetime)}
           >
             Reservation

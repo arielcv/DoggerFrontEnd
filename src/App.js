@@ -19,13 +19,13 @@ function App() {
 
   toast.configure();
   const [user, setUser] = useState('');
-
+  console.log(user);
   const handleLogin = (userData) => {
-    setUser(userData)
+    setUser(userData);
   };
 
   const handleLogout = () => {
-    setUser('')
+    setUser('');
   };
 
   return (
@@ -39,7 +39,7 @@ function App() {
         return user ? <DashboardDogs history = {props.history} user = {user}/> : <Redirect to='/login'/>
       }}/>
       <Route path='/walkers' render={(props) => {
-        return user ? <DashboardWalkers/> : <Redirect to='/login'/>
+        return user ? <DashboardWalkers user = {user}/> : <Redirect to='/login'/>
       }}/>
       <Route path='/registration' component={Registration}/>
       <Route path='/login' render={(props) => (

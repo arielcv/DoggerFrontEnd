@@ -2,35 +2,36 @@ import React, {useState, useEffect} from 'react';
 import WalkerCard from "./walkerCard";
 import WalkerRender from "./walkerRender";
 
-import {getWalkers} from '../utils/services'
+import {getDogsByOwner, getWalkers} from '../utils/services'
 import DateTimeReservation from "./dateTimeReservation";
 
 
 function DashboardWalkers(props) {
   const [walkers, setWalkers] = useState([]);
   const [selectedWalker, setSelectedWalker] = useState(null);
-
+  const [dogs, setDogs] = useState(null);
 
   useEffect(async () => {
-    const {data} = await getWalkers();
-    setWalkers(data);
-    console.log(data);
+    const walkers = await getWalkers();
+    setWalkers(walkers.data);
+    const dogs = await getDogsByOwner(props.user.name);
+    setDogs(dogs.data);
   }, []);
 
   const handleSelection = (data) => {
-    setSelectedWalker(data)
+    setSelectedWalker(data);
   };
 
   return (
     <div className="App row">
       <div className="col-4">
-        <WalkerRender data={selectedWalker}/>
+        <WalkerRender data={selectedWalker} dogs = {dogs} walker = {selectedWalker} selection = {handleSelection}/>
         <div className='flex-lg-row align-content-center'>
           <i className='fa fa-4x fa-paw' style={{margin: '5%'}}/>
           <span style={{fontSize:'50px'}}>OR</span>
           <i className='fa fa-4x fa-paw' style={{margin: '5%'}}/>
         </div>
-        <DateTimeReservation/>
+        <DateTimeReservation dogs = {dogs} submitText={"Request an user for an reservation"} target = {'multiple'}/>
       </div>
       <div className="col-8">
         <div className="card-deck">

@@ -1,65 +1,12 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
-import DateTimePicker from "react-widgets/lib/DateTimePicker";
-import {Collapse} from 'react-bootstrap'
-import {toast} from "react-toastify";
-import {sendReservationByWalker} from '../utils/services'
+import DateTimeReservation from "./dateTimeReservation";
 
 Moment.locale('en');
 momentLocalizer();
 
-function WalkerDetails({data}) {
-  const [mode, setMode] = useState(false);
-  const [dateTime, setDateTime] = useState({start: null, end: null});
-  const [errors, setErrors] = useState({start: "", end: ""});
-
-  const handleStart = value => {
-    console.log(value);
-    handleInput(value, 'start');
-  };
-
-  const handleEnd = value => {
-    console.log(value);
-    handleInput(value, 'end');
-  };
-
-  const handleInput = (value, field) => {
-    const current = dateTime;
-    current[field] = value;
-    setDateTime(current);
-    validate(dateTime);
-  };
-
-  const validate = dateTime => {
-    const errorArray = {};
-    if (!dateTime.start) {
-      errorArray.start = 'True';
-    }
-    if (!dateTime.end) {
-      errorArray.end = 'True';
-    }
-    setErrors(errorArray);
-    return Object.keys(errorArray).length;
-  };
-
-  const handleSubmit = async () => {
-    if (validate(dateTime)) {
-      toast.error('There are some errors in your reservation');
-    } else {
-      try {
-        const response = await sendReservationByWalker(data.user, dateTime.start, dateTime.end);
-        const {start, end} = response.data;
-        console.log('Here');
-        const startDate = new Date(start);
-        const endDate = new Date(end);
-        console.log(start, end);
-        console.log(startDate, endDate);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  };
+function WalkerDetails({data, dogs, selection}) {
 
   return (
     <div className="card walker-details">
@@ -68,61 +15,12 @@ function WalkerDetails({data}) {
           <div style={{marginLeft: '60px'}}>{data.name}</div>
           <i className='btn-outline-success fa fa-window-close-o'
              style={{padding: '10px', cursor: 'pointer'}}
-             onClick={() => setMode(false)}
+             onClick={() => selection('')}
           />
         </div>
       </h1>
       <div className="card-header">{data.email}</div>
-      <div className='card-header'>
-        <button
-          className='btn btn-outline-success'
-          onClick={() => setMode(!mode)}
-          aria-controls="example-collapse-text"
-          aria-expanded={mode}
-        >
-          Reserve
-        </button>
-      </div>
-      <Collapse in={mode}>
-        <div className="card-body">
-          <div className='form-group'>
-            <label>Start Time</label>
-            <DateTimePicker
-              dropDown
-              data={[
-                'orange',
-                'red',
-                'blue',
-                'purple'
-              ]}
-              onChange={(value) => handleStart(value)}
-            />
-          </div>
-          {errors.start && <div className='formError'>{`The start datetime is required`}</div>}
-
-          <div className='form-group'>
-            <label>Ending Time</label>
-            <DateTimePicker
-              dropDown
-              data={[
-                'orange',
-                'red',
-                'blue',
-                'purple'
-              ]}
-              onChange={(value) => handleEnd(value)}
-            />
-          </div>
-          {errors.end && <div className='formError'>{`The end datetime is required`}</div>}
-
-          <button className="btn btn-sm btn-primary"
-                  style={{margin: '3%'}}
-                  onClick={(datetime) => handleSubmit(datetime)}
-          >
-            Reservation
-          </button>
-        </div>
-      </Collapse>
+      <DateTimeReservation walker = {data.name} dogs={dogs} submitText={'Reserve this walker'} target = {'single'}/>
 
     </div>
   )

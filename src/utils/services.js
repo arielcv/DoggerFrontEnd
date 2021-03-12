@@ -72,13 +72,26 @@ export const deleteDog = async (id) => {
   )
 };
 
-export const sendReservationByWalker = async (walkerId, start, end) => {
-  return await axios.post(baseURL.urlAPI + 'walkers/' + walkerId + '/' + 'reservation/',
-    {start, end},
+export const sendReservationByWalker = async (walker, start, end, dog) => {
+  console.log(walker, start, end, dog);
+  return await axios.post(baseURL.urlAPI + 'walkers/' + walker + '/' + 'reservation/',
+    {start, end, dog},
     {
       headers: {
         'Authorization': `${localStorage.getItem('Authorization')}`
       }
     }
   )
-}
+};
+
+export const sendReservationToAll = async (walker, start, end, dog) => {
+  console.log(walker, start, end, dog);
+  return await axios.post(baseURL.urlAPI + 'walkers/' + walker + '/' + 'reservation/',
+    {start, end, dog},
+    {
+      headers: {
+        'Authorization': `${localStorage.getItem('Authorization')}`
+      }
+    }
+  )
+};
