@@ -4,11 +4,12 @@ import {updateDog} from "../utils/services";
 
 function DogCard({id, owner, name, size, deleteDog}) {
   const [editable, setEditable] = useState(false);
-  const [data, setData] = useState({name, size});
+  const [data, setData] = useState({id,name, size});
 
   const handleEditDog = async (data) => {
     console.log(data);
     try {
+      console.log(data);
       const response = await updateDog(data);
       const updatedName = response.data.name;
       const updatedSize = response.data.size;

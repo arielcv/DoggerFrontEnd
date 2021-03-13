@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-function CreateDogForm({id, owner, addDog, editDog, name, size, createForm}) {
+function CreateDogForm({owner, addDog,id, editDog, name, size, createForm}) {
   const [data, setData] = useState({id: id,name: name, size: size, owner});
   const [errors, setErrors] = useState({});
 

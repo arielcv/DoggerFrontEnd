@@ -13,7 +13,6 @@ function DashboardDogs(props) {
     try {
       const {data} = await getDogsByOwner(props.user.name);
       setDogs(data);
-      console.log('Use effect')
     } catch (e) {
       console.log(e.response.status);
     }

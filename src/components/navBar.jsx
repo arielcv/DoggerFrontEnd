@@ -9,16 +9,22 @@ function NavBar({user, logout}) {
         <li className="nav-item col-8">
           <Link to={'/profile'}>My Profile</Link>
         </li>
-        <li className="nav-item col-6">
-          {user.role === 'owner' ? <Link to={"/dogs"}>My dogs</Link> : ''}
-        </li>
-        <li className="nav-item col-6">
-          {user.role === 'owner' ? <Link to={"/walkers"} >Walkers</Link> : ''}
-        </li>
+        {user.role === 'owner' && <li className="nav-item col-6">
+          <Link to={"/dogs"}>My dogs</Link>
+        </li>}
+        {user.role === 'owner' && <li className="nav-item col-6">
+          <Link to={"/owner-reservations"}>My reservations</Link>
+        </li>}
+        {user.role === 'walker' &&<li className="nav-item col-6">
+          <Link to={"/walker-reservations"}>My reservations</Link>
+        </li>}
+        {user.role === 'owner' && <li className="nav-item col-6">
+          <Link to={"/walkers"} >Walkers</Link>
+        </li>}
       </ul>
-      <ul className="nav navbar-nav justify-content-end align-content-around" style={{width: '80%'}}>
-        <li
-          className='align-items-end'>{user ? `Hello ${user.user.username}` :
+      <ul className="nav navbar-nav justify-content-end align-content-between" style={{width: '80%'}}>
+        <li className='align-items-end'>
+          {user ? `Hello ${user.user.username}` :
           <Link to='/login'>Hello. You are not logged. Please login to enjoy our services</Link>}
         </li>
         <li>

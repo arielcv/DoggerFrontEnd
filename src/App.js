@@ -14,12 +14,15 @@ import "react-toastify/dist/ReactToastify.css"
 import 'font-awesome/css/font-awesome.css'
 import './App.css';
 import DashboardDogs from "./components/dashboardDogs";
+import Reservations from "./reservations";
+
 
 function App() {
-
   toast.configure();
+
   const [user, setUser] = useState('');
   console.log(user);
+
   const handleLogin = (userData) => {
     setUser(userData);
   };
@@ -40,6 +43,12 @@ function App() {
       }}/>
       <Route path='/walkers' render={(props) => {
         return user ? <DashboardWalkers user = {user}/> : <Redirect to='/login'/>
+      }}/>
+      <Route path='/walker-reservations' render={(props) => {
+        return user.role === 'walker' ? <Reservations user = {user}/> : <Redirect to='/login'/>
+      }}/>
+      <Route path='/owner-reservations' render={(props) => {
+        return user.role === 'owner' ? <Reservations user = {user}/> : <Redirect to='/login'/>
       }}/>
       <Route path='/registration' component={Registration}/>
       <Route path='/login' render={(props) => (

@@ -3,7 +3,7 @@ import baseURL from "../config";
 
 
 export const login = async (user, password) => {
-  try{
+  try {
     const {data} = await axios.post(baseURL.urlAPI + 'login/', {
       'username': user,
       'password': password
@@ -11,7 +11,7 @@ export const login = async (user, password) => {
     const token = `Token ${data.token}`;
     localStorage.setItem('Authorization', token);
     return await getProfileDetails(user)
-  }catch (e) {
+  } catch (e) {
     console.log('Error')
   }
 };
@@ -76,6 +76,26 @@ export const sendReservationByWalker = async (walker, start, end, dog) => {
   console.log(walker, start, end, dog);
   return await axios.post(baseURL.urlAPI + 'walkers/' + walker + '/' + 'reservation/',
     {start, end, dog},
+    {
+      headers: {
+        'Authorization': `${localStorage.getItem('Authorization')}`
+      }
+    }
+  )
+};
+
+export const getReservationByWalker = async (walker) => {
+  return await axios.get(baseURL.urlAPI + 'walkers/' + walker + '/' + 'reservation/',
+    {
+      headers: {
+        'Authorization': `${localStorage.getItem('Authorization')}`
+      }
+    }
+  )
+};
+
+export const getReservationByOwner = async (walker) => {
+  return await axios.get(baseURL.urlAPI + 'owners/' + walker + '/' + 'reservation/',
     {
       headers: {
         'Authorization': `${localStorage.getItem('Authorization')}`

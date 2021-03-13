@@ -22,7 +22,6 @@ function LoginForm({setUser, ...props}) {
     const {username, password} = state;
     try {
       const {data} = await login(username, password);
-      console.log(data);
       props.handleLogin(data);
       props.history.replace('/');
     } catch (e) {

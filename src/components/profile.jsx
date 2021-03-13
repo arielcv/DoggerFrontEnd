@@ -29,7 +29,7 @@ function Profile({user}) {
             <textarea rows = {5}
                    className="form-control"
                    id="bio"
-                   value={user.bio}
+                   value={(user.bio) ? user.bio : ''}
             />
           </div>
           {/*{errors.username && <p className='formError'>{errors.username}</p>}*/}
