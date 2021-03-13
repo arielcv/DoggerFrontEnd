@@ -10,6 +10,7 @@ export const login = async (user, password) => {
     });
     const token = `Token ${data.token}`;
     localStorage.setItem('Authorization', token);
+    localStorage.setItem('user', user);
     return await getProfileDetails(user)
   } catch (e) {
     console.log('Error')
@@ -115,3 +116,16 @@ export const sendReservationToAll = async (walker, start, end, dog) => {
     }
   )
 };
+
+export const confirmReservation = async (walker, id) => {
+  console.log(walker, id);
+  return await axios.patch(baseURL.urlAPI + 'walkers/' + walker + '/' + 'reservation/',
+    {id},
+    {
+      headers: {
+        'Authorization': `${localStorage.getItem('Authorization')}`
+      }
+    }
+  )
+};
+

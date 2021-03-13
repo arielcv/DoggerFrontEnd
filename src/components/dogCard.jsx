@@ -32,7 +32,7 @@ function DogCard({id, owner, name, size, deleteDog}) {
               <i className='fa fa-edit'/>
             </button>
             <button className='btn btn-outline-danger'
-                    onClick={() => deleteDog(id)}
+                    onClick={() => deleteDog(data.id)}
             >
               <i className='fa fa-trash-o'/>
             </button>

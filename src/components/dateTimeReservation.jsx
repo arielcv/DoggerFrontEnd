@@ -52,42 +52,26 @@ function DateTimeReservation({walker, dogs, submitText, target, ...props}) {
       if (validate(reservation)) {
         toast.error('There are some errors in your reservation');
       } else {
-
-        if (target === 'multiple') {
-          try {
-            console.log(target);
-            const response = await sendReservationToAll(reservation.start, reservation.end, reservation.selectedDog);
-            const {start, end} = response.data;
-            const startDate = new Date(start);
-            const endDate = new Date(end);
-            toast.success("Your reservation was send to the walker");
-            setReservation({start: null, end: null, selectedDog: null});
-            setMode(false);
-          } catch
-            (e) {
-            if (e.response.status === '406') {
-              toast.error("The walker can't accept your reservation");
-            } else {
-              toast.error("Server error");
-            }
+        let response = '';
+        try {
+          console.log(target);
+          if (target === 'multiple') {
+            response = await sendReservationToAll(reservation.start, reservation.end, reservation.selectedDog);
+          } else if (target === 'single'){
+            response = await sendReservationByWalker(walker,reservation.start, reservation.end, reservation.selectedDog);
           }
-        } else if (target === 'single') {
-          try {
-            console.log(target);
-            const response = await sendReservationByWalker(walker,reservation.start, reservation.end, reservation.selectedDog);
-            const {start, end} = response.data;
-            const startDate = new Date(start);
-            const endDate = new Date(end);
-            toast.success("Your reservation was send to the walker");
-            setReservation({start: null, end: null, selectedDog: null});
-            setMode(false);
-          } catch
-            (e) {
-            if (e.response.status === '406') {
-              toast.error("The walker can't accept your reservation")
-            } else {
-              toast.error("Server error")
-            }
+          const {start, end} = response.data;
+          const startDate = new Date(start);
+          const endDate = new Date(end);
+          toast.success("Your reservation was created");
+          setReservation({start: null, end: null, selectedDog: null});
+          setMode(false);
+        } catch
+          (e) {
+          if (e.response.status === '406') {
+            toast.error("The walker can't accept your reservation");
+          } else {
+            toast.error("Server error");
           }
         }
       }

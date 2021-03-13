@@ -18,12 +18,12 @@ function DashboardDogs(props) {
     }
   }, []);
 
-  const handleAddDog = async (data) => {
-    console.log(data);
+  const handleAddDog = async (newDog) => {
+    console.log(newDog);
     try {
-      const response = await createDog(data);
+      const response = await createDog(newDog);
       console.log(response.data);
-      const arrayDogs = [...dogs, data];
+      const arrayDogs = [...dogs, newDog];
       setDogs(arrayDogs);
       setAdding(false);
       return {}
@@ -50,11 +50,10 @@ function DashboardDogs(props) {
     console.log(id);
     try {
       const response = await deleteDog(id);
-      console.log(response.data);
       const arrayDogs = dogs.filter((dog) => dog.id !== id);
       setDogs(arrayDogs);
       setAdding(false);
-      return {}
+
     } catch (e) {
       return e.response.data;
     }

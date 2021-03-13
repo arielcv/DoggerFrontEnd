@@ -1,5 +1,5 @@
 import {Route, Redirect} from 'react-router-dom'
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 
 import DashboardWalkers from "./components/dashboardWalkers";
 import NavBar from "./components/navBar";
@@ -14,46 +14,64 @@ import "react-toastify/dist/ReactToastify.css"
 import 'font-awesome/css/font-awesome.css'
 import './App.css';
 import DashboardDogs from "./components/dashboardDogs";
-import Reservations from "./reservations";
+import Reservations from "./components/reservations";
+import {getProfileDetails} from "./utils/services";
 
 
 function App() {
   toast.configure();
 
+  const updateData = async () => {
+    try {
+      const user = localStorage.getItem('user');
+      return (user) ? getProfileDetails(localStorage.getItem('user')) : null
+    } catch (e) {
+      console.log('Error');
+    }
+  };
+
   const [user, setUser] = useState('');
-  console.log(user);
 
   const handleLogin = (userData) => {
     setUser(userData);
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('Authoirization');
     setUser('');
   };
+
+  useEffect(async () => {
+    const {data} = await updateData();
+    setUser(data);
+  }, []);
 
   return (
     <div>
       <ToastContainer/>
       <NavBar user={user} logout={handleLogout}/>
       <Route path='/profile' render={(props) => {
-        return user ? <Profile user = {user}/> : <Redirect to='/login'/>
+        return user ? <Profile user={user}/> : <Redirect to='/login'/>
       }}/>
       <Route exact path='/dogs' render={(props) => {
-        return user ? <DashboardDogs history = {props.history} user = {user}/> : <Redirect to='/login'/>
+        return user ? <DashboardDogs history={props.history} user={user}/> : <Redirect to='/login'/>
       }}/>
       <Route path='/walkers' render={(props) => {
-        return user ? <DashboardWalkers user = {user}/> : <Redirect to='/login'/>
+        return user ? <DashboardWalkers user={user}/> : <Redirect to='/login'/>
       }}/>
       <Route path='/walker-reservations' render={(props) => {
-        return user.role === 'walker' ? <Reservations user = {user}/> : <Redirect to='/login'/>
+        return user.role === 'walker' ? <Reservations user={user}/> : <Redirect to='/login'/>
       }}/>
       <Route path='/owner-reservations' render={(props) => {
-        return user.role === 'owner' ? <Reservations user = {user}/> : <Redirect to='/login'/>
+        return user.role === 'owner' ? <Reservations user={user}/> : <Redirect to='/login'/>
       }}/>
-      <Route path='/registration' component={Registration}/>
-      <Route path='/login' render={(props) => (
-        <LoginForm {...props} handleLogin = {handleLogin}/>
-      )}/>
+      <Route path='/registration' render={(props) => {
+        return (user) ? <Profile user={user}/> : <Registration{...props}/>
+      }}/>
+      <Route path='/login' render={(props) => {
+        return (user) ? <Profile user={user}/> : <LoginForm {...props} handleLogin={handleLogin}/>
+      }}/>
     </div>
   );
 }
