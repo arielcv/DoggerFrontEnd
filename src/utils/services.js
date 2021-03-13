@@ -129,3 +129,32 @@ export const confirmReservation = async (walker, id) => {
   )
 };
 
+export const getConstraints = async (walker) => {
+  return await axios.get(baseURL.urlAPI + 'walkers/' + walker + '/' + 'constraints/',
+    {
+      headers: {
+        'Authorization': `${localStorage.getItem('Authorization')}`
+      }
+    }
+  )
+};
+
+export const removeConstraints = async (id) => {
+  return await axios.delete(baseURL.urlAPI + 'walkers/constraints/' + id,
+    {
+      headers: {
+        'Authorization': `${localStorage.getItem('Authorization')}`
+      }
+    }
+  )
+};
+//
+// export const editConstraints = async (id) => {
+//   return await axios.get(baseURL.urlAPI + 'walkers/' + walker + '/' + 'constraints/',
+//     {
+//       headers: {
+//         'Authorization': `${localStorage.getItem('Authorization')}`
+//       }
+//     }
+//   )
+// }

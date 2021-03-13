@@ -38,7 +38,7 @@ function Reservations({user}) {
         </button>}
         {user.role === 'walker' && <button className='btn btn-outline-danger btn-actions'
                                            disabled={confirmed}
-                                           onClick={() => rejectReservation(id)}
+                                           onClick={() => cancelReservation(id)}
         >
           Reject
         </button>}
@@ -68,10 +68,10 @@ function Reservations({user}) {
     </table>
   );
 
-  const setTrue = (item,field) => {
+  const setTrue = (item, field) => {
     item[field] = true;
     return item
-  }
+  };
 
   const handleconfirmReservation = async (id) => {
     try {
@@ -83,17 +83,13 @@ function Reservations({user}) {
     }
   };
 
-  const rejectReservation = (id) => {
-
-  };
-
   const cancelReservation = (id) => {
 
   };
 
   return (
     <div style={{alignContent: 'center', textAlign: 'center', margin: '2.5% 0'}}>
-      {reservations ? table() : <h1 className='jumbotron jumbotron-fluid'> You have no reservations</h1>}
+      {reservations.length !== 0 ? table() : <h1 className='jumbotron jumbotron-fluid'> You have no reservations</h1>}
     </div>
   );
 }

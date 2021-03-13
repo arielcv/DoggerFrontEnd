@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Link} from "react-router-dom";
 import {login} from "../utils/services";
 
-function LoginForm({setUser, ...props}) {
+function LoginForm({handleLogin, ...props}) {
 
   const [state, setState] = useState({
     username: "",
@@ -22,7 +22,7 @@ function LoginForm({setUser, ...props}) {
     const {username, password} = state;
     try {
       const {data} = await login(username, password);
-      props.handleLogin(data);
+      handleLogin(data);
       props.history.replace('/');
     } catch (e) {
       console.log(e);

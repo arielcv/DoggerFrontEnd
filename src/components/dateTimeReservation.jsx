@@ -68,7 +68,7 @@ function DateTimeReservation({walker, dogs, submitText, target, ...props}) {
           setMode(false);
         } catch
           (e) {
-          if (e.response.status === '406') {
+          if (e.response.status === 406) {
             toast.error("The walker can't accept your reservation");
           } else {
             toast.error("Server error");

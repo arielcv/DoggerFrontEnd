@@ -38,13 +38,13 @@ function App() {
 
   const handleLogout = () => {
     localStorage.removeItem('user');
-    localStorage.removeItem('Authoirization');
+    localStorage.removeItem('Authorization');
     setUser('');
   };
 
   useEffect(async () => {
-    const {data} = await updateData();
-    setUser(data);
+    const response = await updateData();
+    (response)?setUser(response.data):setUser('')
   }, []);
 
   return (
@@ -70,7 +70,7 @@ function App() {
         return (user) ? <Profile user={user}/> : <Registration{...props}/>
       }}/>
       <Route path='/login' render={(props) => {
-        return (user) ? <Profile user={user}/> : <LoginForm {...props} handleLogin={handleLogin}/>
+        return (user) ? <Redirect to='/profile' />: <LoginForm {...props} handleLogin={handleLogin}/>
       }}/>
     </div>
   );

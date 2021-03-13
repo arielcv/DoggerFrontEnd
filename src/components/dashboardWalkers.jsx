@@ -36,7 +36,7 @@ function DashboardWalkers(props) {
       <div className="col-8">
         <div className="card-deck">
           {walkers.map(data => <WalkerCard
-              key={data.user}
+              key={data.id}
               data={data}
               handleSelection={() => handleSelection(data)}
             />
