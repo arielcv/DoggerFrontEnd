@@ -40,11 +40,18 @@ export const getWalkers = async () => {
 };
 
 export const getProfileDetails = async (user) => {
-  return await axios.get(baseURL.urlAPI + 'users/' + user, {
-    headers: {
-      'Authorization': `${localStorage.getItem('Authorization')}`
-    }
-  })
+  try {
+    const {data} = await axios.get(baseURL.urlAPI + 'users/' + user, {
+      headers: {
+        'Authorization': `${localStorage.getItem('Authorization')}`
+      }
+    });
+    return data
+  } catch (e) {
+    toast.error(e.response.data);
+    console.log(e.response.data);
+    return false
+  }
 };
 
 export const getDogsByOwner = async (user) => {
@@ -62,14 +69,20 @@ export const getDogsByOwner = async (user) => {
 };
 
 export const createDog = async ({owner, name, size}) => {
-  return await axios.post(baseURL.urlAPI + 'dogs/',
-    {owner, name, size},
-    {
-      headers: {
-        'Authorization': `${localStorage.getItem('Authorization')}`
+  try {
+    const {data} = await axios.post(baseURL.urlAPI + 'dogs/',
+      {owner, name, size},
+      {
+        headers: {
+          'Authorization': `${localStorage.getItem('Authorization')}`
+        }
       }
-    }
-  )
+    );
+    return data
+  } catch (e) {
+    toast.error(e.response.data);
+    return false
+  }
 };
 
 export const updateDog = async ({id, name, size}) => {

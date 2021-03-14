@@ -15,14 +15,15 @@ function DashboardDogs(props) {
   }, []);
 
   const handleAddDog = async (newDog) => {
-    console.log(newDog);
     try {
       const response = await createDog(newDog);
-      console.log(response.data);
-      const arrayDogs = [...dogs, newDog];
-      setDogs(arrayDogs);
-      setAdding(false);
-      return {}
+      if (response) {
+        console.log(response);
+        const arrayDogs = [...dogs, response];
+        setDogs(arrayDogs);
+        setAdding(false);
+        return {}
+      }
     } catch (e) {
       return e.response.data;
     }

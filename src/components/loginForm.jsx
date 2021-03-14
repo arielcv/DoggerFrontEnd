@@ -20,9 +20,9 @@ function LoginForm({handleLogin, ...props}) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const {username, password} = state;
-    const response = await login(username, password);
-    if (response){
-      handleLogin(response.data);
+    const data = await login(username, password);
+    if (data){
+      handleLogin(data);
       props.history.replace('/');
     }
   };
