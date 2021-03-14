@@ -5,6 +5,7 @@ function SelectDog({dogs, selectDog}) {
     <div>
       <label htmlFor="selDog">Select a dog:</label>
       <select className="form-control" id="selDog" onChange={(e) => selectDog(e.target.value)}>
+        <option value={''}/>
         {dogs.map(dog => <option value={dog.id}>{dog.name}</option>)}
       </select>
     </div>

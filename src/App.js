@@ -21,13 +21,11 @@ import {getProfileDetails} from "./utils/services";
 function App() {
   toast.configure();
 
-  const updateData = async () => {
-    try {
-      const user = localStorage.getItem('user');
-      return (user) ? getProfileDetails(localStorage.getItem('user')) : null
-    } catch (e) {
-      console.log('Error');
-    }
+  const getData = async () => {
+    const user = localStorage.getItem('user');
+    const data = await getProfileDetails(user);
+    console.log(data);
+    return (data) ? data : false
   };
 
   const [user, setUser] = useState('');
@@ -43,8 +41,8 @@ function App() {
   };
 
   useEffect(async () => {
-    const response = await updateData();
-    (response)?setUser(response.data):setUser('')
+    const response = await getData();
+    (response) ? setUser(response) : setUser('')
   }, []);
 
   return (
@@ -70,7 +68,7 @@ function App() {
         return (user) ? <Profile user={user}/> : <Registration{...props}/>
       }}/>
       <Route path='/login' render={(props) => {
-        return (user) ? <Redirect to='/profile' />: <LoginForm {...props} handleLogin={handleLogin}/>
+        return (user) ? <Redirect to='/profile'/> : <LoginForm {...props} handleLogin={handleLogin}/>
       }}/>
     </div>
   );

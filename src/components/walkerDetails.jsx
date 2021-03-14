@@ -20,7 +20,7 @@ function WalkerDetails({data, dogs, selection}) {
         </div>
       </h1>
       <div className="card-header">{data.email}</div>
-      <DateTimeReservation walker = {data.name} dogs={dogs} submitText={'Reserve this walker'} target = {'single'}/>
+      <DateTimeReservation walkerId = {data.id} dogs={dogs} submitText={'Reserve this walker'} target = {'single'}/>
 
     </div>
   )

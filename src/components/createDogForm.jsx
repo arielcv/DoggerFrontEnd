@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 
-function CreateDogForm({owner, addDog,id, editDog, name, size, createForm}) {
-  const [data, setData] = useState({id: id,name: name, size: size, owner});
-  const [errors, setErrors] = useState({});
+function CreateDogForm({owner, addDog, id, editDog, name, size, createForm}) {
+  const [data, setData] = useState({id: id, name: name, size: size, owner});
+  const [errorArray, setErrorArray] = useState({});
 
   const handleChange = (event) => {
     const id = event.target.id;
@@ -10,16 +10,27 @@ function CreateDogForm({owner, addDog,id, editDog, name, size, createForm}) {
     const newDog = {...data};
     newDog[id] = value;
     setData(newDog);
+    validate()
+  };
+
+  const validate = () => {
+    const errorArray = {};
+    if (!data.name) {
+      errorArray.start = 'True';
+    }
+    if (!data.size) {
+      errorArray.end = 'True';
+    }
+    setErrorArray(errorArray);
+    return Object.keys(errorArray).length;
   };
 
   const handleSubmit = async () => {
-    console.log(editDog);
-    console.log(data);
-    const errorArray = (createForm) ? await addDog(data) : await editDog(data);
-    if (errorArray) {
-      setErrors(errorArray);
-    } else {
-      setData({name: '', size: 'small', owner});
+    if (validate() === 0) {
+      const errors = (createForm) ? await addDog(data) : await editDog(data);
+      if (errors){
+        setErrorArray(errors)
+      }
     }
   };
 
@@ -35,12 +46,12 @@ function CreateDogForm({owner, addDog,id, editDog, name, size, createForm}) {
                  onChange={handleChange}
           />
         </div>
-        {errors.name && <p className='formError'>{errors.name}</p>}
+        {errorArray.name && <p className='formError'>{errorArray.name}</p>}
 
         <div style={{minWidth: '30%', margin: '1%'}}>
           <div className="form-group">
             <label htmlFor="size">Select size:</label>
-            <select className="form-control" id="size" onChange={handleChange} value={data.size} >
+            <select className="form-control" id="size" onChange={handleChange} value={data.size}>
               <option/>
               <option value={'small'}>Small</option>
               <option value={'medium'}>Medium</option>
@@ -48,7 +59,7 @@ function CreateDogForm({owner, addDog,id, editDog, name, size, createForm}) {
             </select>
           </div>
         </div>
-        {errors.size && <p className='formError'>{errors.size}</p>}
+        {errorArray.size && <p className='formError'>{errorArray.size}</p>}
 
         <button type="submit"
                 className="btn btn-primary"
