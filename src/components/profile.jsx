@@ -149,7 +149,7 @@ function Profile({user}) {
           <div className="form-group">
             <label htmlFor="bithdate">Birthdate</label>
             <DatePicker onChange={(e) => handleInput(e, 'birthDate')}
-                        value = {(dataProfile.birthDate) ? dataProfile.birthDate: ''}
+                        value = {(dataProfile.birthDate) ? dataProfile.birthDate: new Date()}
                         min = {new Date(1900, 1, 1)}
                         max = {new Date()}
             />
