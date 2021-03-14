@@ -27,7 +27,10 @@ function CreateDogForm({owner, addDog, id, editDog, name, size, createForm}) {
 
   const handleSubmit = async () => {
     if (validate() === 0) {
-      (createForm) ? await addDog(data) : await editDog(data)
+      const errors = (createForm) ? await addDog(data) : await editDog(data);
+      if (errors){
+        setErrorArray(errors)
+      }
     }
   };
 

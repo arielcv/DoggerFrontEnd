@@ -80,20 +80,25 @@ export const createDog = async ({owner, name, size}) => {
     );
     return data
   } catch (e) {
-    toast.error(e.response.data);
-    return false
+    return e.response.data
   }
 };
 
 export const updateDog = async ({id, name, size}) => {
-  return await axios.post(baseURL.urlAPI + 'dogs/' + id + '/',
-    {name, size},
-    {
-      headers: {
-        'Authorization': `${localStorage.getItem('Authorization')}`
+  try {
+    const {data} = await axios.post(baseURL.urlAPI + 'dogs/' + id + '/',
+      {name, size},
+      {
+        headers: {
+          'Authorization': `${localStorage.getItem('Authorization')}`
+        }
       }
-    }
-  )
+    );
+    toast.success(`The data of ${data.name} has been succesfully modified`);
+    return data
+  } catch (e) {
+    return false
+  }
 };
 
 export const deleteDog = async (id) => {

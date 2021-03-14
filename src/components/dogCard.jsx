@@ -4,19 +4,15 @@ import {updateDog} from "../utils/services";
 
 function DogCard({id, owner, name, size, deleteDog}) {
   const [editable, setEditable] = useState(false);
-  const [data, setData] = useState({id,name, size});
+  const [data, setData] = useState({id, name, size});
 
   const handleEditDog = async (data) => {
-    console.log(data);
-    try {
-      console.log(data);
-      const response = await updateDog(data);
-      const updatedName = response.data.name;
-      const updatedSize = response.data.size;
-      setData({name: updatedName, size: updatedSize});
+    const newData = await updateDog(data);
+    if (newData) {
+      setData(newData);
       setEditable(false);
-    } catch (e) {
-      console.log("There was some errors");
+    } else {
+      return newData
     }
   };
 
@@ -43,10 +39,10 @@ function DogCard({id, owner, name, size, deleteDog}) {
     </div>;
 
   return (
-    (editable) ? <CreateDogForm id={id}
+    (editable) ? <CreateDogForm id={data.id}
                                 owner={owner}
-                                name={name}
-                                size={size}
+                                name={data.name}
+                                size={data.size}
                                 createForm={false}
                                 editDog={handleEditDog}/> : dogInfo
   );
