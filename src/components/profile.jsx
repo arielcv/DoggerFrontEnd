@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import Alert from 'react-bootstrap/Alert'
+import {DatePicker} from 'react-widgets'
 import {getConstraints,removeConstraints} from "../utils/services";
 import AddConstraint from "./addConstraint";
 
@@ -23,11 +24,13 @@ function Profile({user}) {
 
   const validate = (profile) => {
     const errorArray = {};
-    const currentYear = profile.birthDate.slice(0, 4);
-    const minAge = 16;
-    const minYear = new Date().getFullYear() - minAge;
-    if (dataProfile.birthDate && currentYear > minYear) {
-      errorArray.birthDate = 'The min age required is 16';
+    if (profile.birthDate) {
+      const currentYear = profile.birthDate.getFullYear();
+      const minAge = 16;
+      const minYear = new Date().getFullYear() - minAge;
+      if (currentYear > minYear){
+        errorArray.birthDate = 'The min age required is 16';
+      }
     }
     setErrors(errorArray);
   };
@@ -101,7 +104,7 @@ function Profile({user}) {
             <Alert.Heading>You are a dog {user.role}</Alert.Heading>
           </Alert>
 
-          <div>
+          {user.role === 'walker' &&<div>
             <div style={{margin: '1% 0'}}>
               <button className='btn btn-success ' onClick={() => fetchConstraints()}>Show Constraints
               </button>
@@ -129,7 +132,7 @@ function Profile({user}) {
                 />
               </div>
             </Alert>
-          </div>
+          </div>}
 
           <div className="form-group">
             <label htmlFor="username">Bio</label>
@@ -142,13 +145,13 @@ function Profile({user}) {
           </div>
           {/*{errors.username && <p className='formError'>{errors.username}</p>}*/}
 
+
           <div className="form-group">
-            <label htmlFor="username">Birthdate</label>
-            <input type="date"
-                   className="form-control"
-                   id="birthDate"
-                   value={dataProfile.birthDate}
-                   onChange={(e) => handleInput(e.target.value, e.target.id)}
+            <label htmlFor="bithdate">Birthdate</label>
+            <DatePicker onChange={(e) => handleInput(e, 'birthDate')}
+                        value = {(dataProfile.birthDate) ? dataProfile.birthDate: ''}
+                        min = {new Date(1900, 1, 1)}
+                        max = {new Date()}
             />
           </div>
           {errors.birthDate && <p className='formError'>{errors.birthDate}</p>}
