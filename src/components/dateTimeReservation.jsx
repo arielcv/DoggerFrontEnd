@@ -6,9 +6,9 @@ import {Link} from 'react-router-dom'
 import {sendReservationByWalker, sendReservationToAll} from "../utils/services";
 import SelectDog from "./selectDog";
 
-function DateTimeReservation({walker, dogs, submitText, target, ...props}) {
+function DateTimeReservation({walkerId, dogs, submitText, target, ...props}) {
   const [mode, setMode] = useState(false);
-  const [reservation, setReservation] = useState({start: null, end: null, selectedDog: null});
+  const [reservation, setReservation] = useState({start: null, end: null, selectedDogId: null});
   const [errors, setErrors] = useState({start: "", end: ""});
 
   const handleStart = value => {
@@ -23,7 +23,7 @@ function DateTimeReservation({walker, dogs, submitText, target, ...props}) {
 
   const handleDog = (dog) => {
     console.log(dog);
-    handleInput(dog, 'selectedDog');
+    handleInput(dog, 'selectedDogId');
   };
 
   const handleInput = (value, field) => {
@@ -41,7 +41,7 @@ function DateTimeReservation({walker, dogs, submitText, target, ...props}) {
     if (!reservation.end) {
       errorArray.end = 'True';
     }
-    if (!reservation.selectedDog) {
+    if (!reservation.selectedDogId) {
       errorArray.selectedDog = 'True';
     }
     setErrors(errorArray);
@@ -54,22 +54,24 @@ function DateTimeReservation({walker, dogs, submitText, target, ...props}) {
       } else {
         let response = '';
         try {
-          console.log(target);
+          console.log(walkerId);
           if (target === 'multiple') {
-            response = await sendReservationToAll(reservation.start, reservation.end, reservation.selectedDog);
+            response = await sendReservationToAll(reservation.start, reservation.end, reservation.selectedDogId);
           } else if (target === 'single'){
-            response = await sendReservationByWalker(walker,reservation.start, reservation.end, reservation.selectedDog);
+            response = await sendReservationByWalker(walkerId,reservation.start, reservation.end, reservation.selectedDogId);
           }
           const {start, end} = response.data;
           const startDate = new Date(start);
           const endDate = new Date(end);
           toast.success("Your reservation was created");
-          setReservation({start: null, end: null, selectedDog: null});
+          setReservation({start: null, end: null, selectedDogId: null});
           setMode(false);
         } catch
           (e) {
-          if (e.response.status === 406) {
-            toast.error("The walker can't accept your reservation");
+          if (e.response.status === 403) {
+            toast.error("The walker can't accept your reservation because it isn't in her/his constraints");
+          } else if (e.response.status === 406){
+            toast.error("The walker can't accept your reservation because this time is busy");
           } else {
             toast.error("Server error");
           }
@@ -128,7 +130,7 @@ function DateTimeReservation({walker, dogs, submitText, target, ...props}) {
               <div><h1>You have not dogs</h1><Link to={'/dogs'}>Create one</Link></div>}
 
           </div>
-          {errors.selectedDog && <div className='formError'>{`Select a dog`}</div>}
+          {errors.selectedDogId && <div className='formError'>{`Select a dog`}</div>}
 
           <button className="btn btn-sm btn-primary"
                   style={{margin: '3%'}}

@@ -25,11 +25,18 @@ export const login = async (user, password) => {
 };
 
 export const getWalkers = async () => {
-  return await axios.get(baseURL.urlAPI + 'walkers/', {
-    headers: {
-      'Authorization': `${localStorage.getItem('Authorization')}`
-    }
-  })
+  try {
+    const {data} = await axios.get(baseURL.urlAPI + 'walkers/', {
+      headers: {
+        'Authorization': `${localStorage.getItem('Authorization')}`
+      }
+    });
+    return data
+  } catch (e) {
+    toast.error(e.response.data);
+    return false
+  }
+
 };
 
 export const getProfileDetails = async (user) => {
@@ -41,11 +48,17 @@ export const getProfileDetails = async (user) => {
 };
 
 export const getDogsByOwner = async (user) => {
-  return await axios.get(baseURL.urlAPI + 'dogs/owner/' + user, {
-    headers: {
-      'Authorization': `${localStorage.getItem('Authorization')}`
-    }
-  })
+  try {
+    const {data} = await axios.get(baseURL.urlAPI + 'dogs/owner/' + user, {
+      headers: {
+        'Authorization': `${localStorage.getItem('Authorization')}`
+      }
+    });
+    return data
+  } catch (e) {
+    toast.error(e.response.data);
+    return false
+  }
 };
 
 export const createDog = async ({owner, name, size}) => {
@@ -80,10 +93,10 @@ export const deleteDog = async (id) => {
   )
 };
 
-export const sendReservationByWalker = async (walker, start, end, dog) => {
-  console.log(walker, start, end, dog);
-  return await axios.post(baseURL.urlAPI + 'walkers/' + walker + '/' + 'reservation/',
-    {start, end, dog},
+export const sendReservationByWalker = async (walkerId, start, end, dogId) => {
+  console.log(walkerId, start, end, dogId);
+  return await axios.post(baseURL.urlAPI + 'walkers/' + walkerId + '/' + 'reservation/',
+    {start, end, dogId},
     {
       headers: {
         'Authorization': `${localStorage.getItem('Authorization')}`
@@ -136,8 +149,8 @@ export const confirmReservation = async (walker, id) => {
   )
 };
 
-export const acceptReservation = async (id,walker) => {
-  console.log(id,walker);
+export const acceptReservation = async (id, walker) => {
+  console.log(id, walker);
   return await axios.patch(baseURL.urlAPI + 'reservation/' + id + '/',
     {walker},
     {

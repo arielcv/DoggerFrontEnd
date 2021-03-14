@@ -10,12 +10,8 @@ function DashboardDogs(props) {
   const [adding, setAdding] = useState(false);
 
   useEffect(async () => {
-    try {
-      const {data} = await getDogsByOwner(props.user.name);
-      setDogs(data);
-    } catch (e) {
-      console.log(e.response.status);
-    }
+    const dogs = await getDogsByOwner(props.user.name);
+    if (dogs) setDogs(dogs);
   }, []);
 
   const handleAddDog = async (newDog) => {
@@ -61,10 +57,10 @@ function DashboardDogs(props) {
 
   return (
     <div className='dogCards'>
-      <div className="card-deck d-inline-block" style={{width:'100%'}}>
+      <div className="card-deck d-inline-block" style={{width: '100%'}}>
         {dogs.map(dog => <DogCard
             key={dog.id}
-            id = {dog.id}
+            id={dog.id}
             owner={props.user}
             name={dog.name}
             size={dog.size}
