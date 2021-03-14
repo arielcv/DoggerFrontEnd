@@ -20,18 +20,10 @@ function LoginForm({handleLogin, ...props}) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const {username, password} = state;
-    try {
-      const {data} = await login(username, password);
-      handleLogin(data);
+    const response = await login(username, password);
+    if (response){
+      handleLogin(response.data);
       props.history.replace('/');
-    } catch (e) {
-      console.log(e);
-      if (e.response.status >= 400 && e.response.status < 500) {
-        alert("Incorrect user or password")
-      } else {
-        alert("There was an error in the server")
-      }
-      return null
     }
   };
 

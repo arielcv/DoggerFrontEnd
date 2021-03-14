@@ -1,5 +1,6 @@
 import axios from 'axios'
 import baseURL from "../config";
+import {toast} from "react-toastify";
 
 
 export const login = async (user, password) => {
@@ -13,7 +14,13 @@ export const login = async (user, password) => {
     localStorage.setItem('user', user);
     return await getProfileDetails(user)
   } catch (e) {
-    console.log('Error')
+    console.log(e.response);
+    if (e.response.status >= 400 && e.response.status < 500) {
+      toast.error("Incorrect user or password")
+    } else {
+      toast.error("There was an error in the server")
+    }
+    return false
   }
 };
 
