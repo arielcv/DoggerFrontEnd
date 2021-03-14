@@ -23,13 +23,9 @@ function App() {
 
   const getData = async () => {
     const user = localStorage.getItem('user');
-    const dataProfile = await getProfileDetails(user);
-    console.log(dataProfile);
-    if (dataProfile) {
-      setUser(dataProfile);
-    } else {
-      setUser('');
-    }
+    const data = await getProfileDetails(user);
+    console.log(data);
+    return (data) ? data : false
   };
 
   const [user, setUser] = useState('');
@@ -46,7 +42,7 @@ function App() {
 
   useEffect(async () => {
     const response = await getData();
-    (response) ? setUser(response.data) : setUser('')
+    (response) ? setUser(response) : setUser('')
   }, []);
 
   return (
