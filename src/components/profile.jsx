@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Alert from 'react-bootstrap/Alert'
-import {getConstraints,editConstraints,removeConstraints} from "../utils/services";
+import {getConstraints,removeConstraints} from "../utils/services";
 import AddConstraint from "./addConstraint";
 
 function Profile({user}) {
@@ -45,14 +45,16 @@ function Profile({user}) {
     }
   };
 
-  const handleEditConstraints = async () => {
-
+  const handleAddConstraints = async (constraint) => {
+    const updatedConstraints = [...constraints, ...constraint];
+    setConstraints(updatedConstraints)
   };
+
 
   const handleRemoveConstraints = async (id) => {
     const updatedConstraints = constraints.filter(c => c.id !== id);
     try {
-      const response = await removeConstraints(id);
+      await removeConstraints(id);
       setConstraints(updatedConstraints)
     } catch (e) {
       console.log(e.response.error)
@@ -63,11 +65,11 @@ function Profile({user}) {
     setShowConstraints(!showConstraints)
   };
 
-  const row = ({id,start, end, sizesAllowed:size}) => (
+  const row = ({id,start, end, sizesAllowed}) => (
     <tr key={id}>
       <th>{start}</th>
       <th>{end}</th>
-      <th>{size.toUpperCase()}</th>
+      <th>{sizesAllowed.toUpperCase()}</th>
       <th>
         <div className='row flex-row align-content-between justify-content-around'>
           <i onClick={() => handleEditConstraints()} className='fa fa-2x fa-edit btn btn-sm'/>
@@ -78,6 +80,7 @@ function Profile({user}) {
   );
 
   const constraint = (data) => {
+    console.log(data);
     return data.map((c) => row(c))
   };
 
@@ -120,7 +123,11 @@ function Profile({user}) {
                 >
                   Add a constraint
                 </button>
-                <AddConstraint show ={addConstraint} handleShow = {handleShow}/>
+                <AddConstraint show ={addConstraint}
+                               handleShow = {handleShow}
+                               name = {dataProfile.name}
+                               handleAdd={(data) => handleAddConstraints(data)}
+                />
               </div>
             </Alert>
           </div>
