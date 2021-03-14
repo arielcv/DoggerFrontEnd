@@ -72,7 +72,6 @@ function Profile({user}) {
       <th>{sizesAllowed.toUpperCase()}</th>
       <th>
         <div className='row flex-row align-content-between justify-content-around'>
-          <i onClick={() => handleEditConstraints()} className='fa fa-2x fa-edit btn btn-sm'/>
           <i onClick={() => handleRemoveConstraints(id)} className='fa fa-2x fa-remove btn btn-sm'/>
         </div>
       </th>

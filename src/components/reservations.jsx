@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {getReservationByWalker, getReservationByOwner, confirmReservation} from "../utils/services";
+import {getReservationByWalker, getReservationByOwner, confirmReservation, acceptReservation} from "../utils/services";
 
 function Reservations({user}) {
 
-  const [reservations, setReservations] = useState([]);
+  const [reservationsAssigned, setReservationsAssigned] = useState([]);
+  const [reservationsUnassigned, setReservationsUnassigned] = useState([]);
 
   useEffect(async () => {
     try {
@@ -13,32 +14,33 @@ function Reservations({user}) {
       } else if (user.role === 'owner') {
         reservations = await getReservationByOwner(user.name);
       }
-      console.log(reservations.data);
-      setReservations(reservations.data);
+      setReservationsAssigned([...reservations.data[0]]);
+      setReservationsUnassigned([...reservations.data[1]]);
     } catch (e) {
-      console.log("Error");
+      console.log(e);
     }
   }, []);
 
-  const row = ({id, start, end, dog, owner, confirmed}) => (
+  const row = ({id, start, end, dog, owner, confirmed}, assigned) => (
     <tr key={id}>
-      <th>{start}</th>
-      <th>{end}</th>
-      <th>{dog.name}</th>
-      <th>{dog.size.toUpperCase()}</th>
-      <th>{owner.name}</th>
-      <th>{(confirmed) ? <i className='fa fa-2x fa-check-circle text-success'/> :
+      {console.log(1)}
+      <td>{start}</td>
+      <td>{end}</td>
+      <td>{dog.name}</td>
+      <td>{dog.size.toUpperCase()}</td>
+      <td>{owner.name}</td>
+      <td>{(confirmed) ? <i className='fa fa-2x fa-check-circle text-success'/> :
         <i className='fa fa-2x fa-clock-o text-warning' style={{padding: '5%'}}/>}
-      </th>
+      </td>
       <th>
         {user.role === 'walker' && <button className='btn btn-outline-success btn-actions'
                                            disabled={confirmed}
-                                           onClick={() => handleconfirmReservation(id)}
+                                           onClick={(assigned) ? () => handleConfirmReservation(id) : () => handleAcceptReservation(id)}
         >Accept
         </button>}
-        {user.role === 'walker' && <button className='btn btn-outline-danger btn-actions'
-                                           disabled={confirmed}
-                                           onClick={() => cancelReservation(id)}
+        {user.role === 'walker' && assigned && <button className='btn btn-outline-danger btn-actions'
+                                                       disabled={confirmed}
+                                                       onClick={() => cancelReservation(id)}
         >
           Reject
         </button>}
@@ -64,7 +66,15 @@ function Reservations({user}) {
         <th>State</th>
         <th>Actions</th>
       </tr>
-      {reservations.map(r => row(r))}
+      {console.log('assigned',reservationsAssigned)}
+      {console.log('unassigned',reservationsUnassigned)}
+      {(reservationsAssigned.length !== 0) ? <th colSpan={7}>Assigned Reservations</th> :
+        <th colSpan={7}>There are no assigned reservations </th>}
+      {(reservationsAssigned.length !== 0) ? reservationsAssigned.map(r => row(r,true)) : ''}
+      <tr/>
+      {(reservationsUnassigned.length !== 0) ? <th colSpan={7}>Unassigned Reservations</th> :
+        <th colSpan={7}>There are no unassigned reservations </th>}
+      {(reservationsUnassigned.length !== 0) ? reservationsUnassigned.map(r => row(r, false)) : ''}
     </table>
   );
 
@@ -73,23 +83,34 @@ function Reservations({user}) {
     return item
   };
 
-  const handleconfirmReservation = async (id) => {
+  const handleConfirmReservation = async (id) => {
     try {
       await confirmReservation(user.name, id);
-      const updatedReservations = reservations.map(r => r.id === id ? setTrue(r, 'confirmed') : r);
-      setReservations(updatedReservations);
+      const updatedReservations = reservationsAssigned.map(r => r.id === id ? setTrue(r, 'confirmed') : r);
+      setReservationsAssigned(updatedReservations);
     } catch (e) {
       console.log('Error');
     }
   };
 
-  const cancelReservation = (id) => {
-
+  const handleAcceptReservation = async (id) => {
+    try {
+      console.log(id);
+      const {data} = await acceptReservation(id,user.name);
+      console.log(reservationsUnassigned);
+      console.log(data);
+      console.log([...reservationsUnassigned, data]);
+      setReservationsUnassigned(reservationsUnassigned.filter(r => r.id !== id));
+      setReservationsAssigned([...reservationsAssigned,data]);
+    } catch (e) {
+      console.log('Error');
+    }
   };
 
   return (
     <div style={{alignContent: 'center', textAlign: 'center', margin: '2.5% 0'}}>
-      {reservations.length !== 0 ? table() : <h1 className='jumbotron jumbotron-fluid'> You have no reservations</h1>}
+      {reservationsAssigned.length !== 0 || reservationsUnassigned.length !== 0 ? table() :
+        <h1 className='jumbotron jumbotron-fluid'> You have no reservations</h1>}
     </div>
   );
 }

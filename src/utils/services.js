@@ -129,10 +129,22 @@ export const confirmReservation = async (walker, id) => {
   )
 };
 
-export const createConstraints = async (walker,start,end,sizesAllowed) => {
+export const acceptReservation = async (id,walker) => {
+  console.log(id,walker);
+  return await axios.patch(baseURL.urlAPI + 'reservation/' + id + '/',
+    {walker},
+    {
+      headers: {
+        'Authorization': `${localStorage.getItem('Authorization')}`
+      }
+    }
+  )
+};
+
+export const createConstraints = async (walker, start, end, sizesAllowed) => {
   console.log(walker, start, end, sizesAllowed);
   return await axios.post(baseURL.urlAPI + 'walkers/' + walker + '/' + 'constraints/',
-    {start,end,sizesAllowed},
+    {start, end, sizesAllowed},
     {
       headers: {
         'Authorization': `${localStorage.getItem('Authorization')}`
