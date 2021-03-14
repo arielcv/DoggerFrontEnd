@@ -40,13 +40,13 @@ function Reservations({user}) {
         </button>}
         {user.role === 'walker' && assigned && <button className='btn btn-outline-danger btn-actions'
                                                        disabled={confirmed}
-                                                       onClick={() => cancelReservation(id)}
+                                                       // onClick={() => cancelReservation(id)}
         >
           Reject
         </button>}
         {user.role === 'owner' && <button className='btn btn-outline-danger btn-actions'
                                           disabled={confirmed}
-                                          onClick={() => cancelReservation(id)}
+                                          // onClick={() => cancelReservation(id)}
         >
           Cancel
         </button>}
