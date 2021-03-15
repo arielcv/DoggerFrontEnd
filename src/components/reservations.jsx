@@ -21,10 +21,23 @@ function Reservations({user}) {
     }
   }, []);
 
+  const parseDate = (data) => {
+    const correctionFactor = 6;
+    const year = data.slice(0, 4);
+    const month = data.slice(5, 7);
+    const day = data.slice(8, 10);
+    const hour = data.slice(11, 13) - correctionFactor;
+    const minute = data.slice(14, 16);
+    const second = data.slice(17, 19);
+    const datetime = new Date(year, month, day, hour, minute, second);
+    return [datetime.toLocaleDateString(), datetime.toLocaleTimeString()]
+  };
+
   const row = ({id: reservationId, start, end, dog, owner, walker, confirmed, ...rest}, assigned) => (
     <tr key={reservationId}>
-      <td>{start}</td>
-      <td>{end}</td>
+
+      <td>{parseDate(start).map(e =><div>{e}</div>)}</td>
+      <td>{parseDate(end).map(e =><div>{e}</div>)}</td>
       <td>{dog.name}</td>
       <td>{dog.size.toUpperCase()}</td>
       {(user.role === 'walker') && <td>{owner.name}</td>}
@@ -42,13 +55,11 @@ function Reservations({user}) {
         </button>}
         {user.role === 'walker' && assigned && <button className='btn btn-outline-danger btn-actions'
                                                        disabled={confirmed}
-          // onClick={() => cancelReservation(id)}
         >
           Reject
         </button>}
         {user.role === 'owner' && <button className='btn btn-outline-danger btn-actions'
                                           disabled={confirmed}
-          // onClick={() => cancelReservation(id)}
         >
           Cancel
         </button>}

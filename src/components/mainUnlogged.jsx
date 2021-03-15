@@ -1,6 +1,6 @@
 import React from 'react';
-import dog1 from '../imgs/dog1.jpg'
-import dog2 from '../imgs/dog2.jpg'
+import dog1 from '../imgs/dog1.png'
+import dog2 from '../imgs/dog2.png'
 
 function MainUnlogged(props) {
   return (

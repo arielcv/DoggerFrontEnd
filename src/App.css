@@ -102,8 +102,9 @@
 
 .dog1{
     position: absolute;
-    max-height: 40%;
-    max-width: 40%;
+    max-height: 50%;
+    max-width: 50%;
+    top: 8.6%;
     right: 20px;
     fill: white;
     background:transparent
@@ -111,8 +112,8 @@
 
 .dog2{
     position: absolute;
-    max-height: 40%;
-    max-width: 40%;
+    max-height: 60%;
+    max-width: 60%;
     left: 20px;
     bottom: 20px;
     fill: white;
