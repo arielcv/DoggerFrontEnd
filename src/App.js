@@ -1,23 +1,23 @@
 import {Route, Redirect} from 'react-router-dom'
 import React, {useState, useEffect} from "react";
+import {toast, ToastContainer} from "react-toastify";
 
 import DashboardWalkers from "./components/dashboardWalkers";
 import NavBar from "./components/navBar";
 import LoginForm from "./components/loginForm";
 import Registration from "./components/registration";
 import Profile from "./components/profile";
-import {toast, ToastContainer} from "react-toastify";
+import DashboardDogs from "./components/dashboardDogs";
+import Reservations from "./components/reservations";
+import {getProfileDetails} from "./utils/services";
+import MainUnlogged from "./components/mainUnlogged";
+import MainLogged from "./components/mainLogged";
 
 import "bootstrap/dist/css/bootstrap.min.css"
 import 'react-widgets/dist/css/react-widgets.css';
 import "react-toastify/dist/ReactToastify.css"
 import 'font-awesome/css/font-awesome.css'
 import './App.css';
-import DashboardDogs from "./components/dashboardDogs";
-import Reservations from "./components/reservations";
-import {getProfileDetails} from "./utils/services";
-import MainUnlogged from "./components/mainUnlogged";
-import MainLogged from "./components/mainLogged";
 
 
 function App() {
@@ -53,12 +53,12 @@ function App() {
 
       {user && <NavBar user={user} logout={handleLogout}/>}
 
-      <Route exact path={'/'} render ={(props) => {
-        return user ? <MainLogged/> :<MainUnlogged/>
+      <Route exact path={'/'} render={(props) => {
+        return user ? <MainLogged/> : <MainUnlogged/>
       }}/>
 
       <Route path='/profile' render={(props) => {
-        return user ? <Profile user={user} handleLogin = {handleLogin}/> : <Redirect to='/login'/>
+        return user ? <Profile user={user} handleLogin={handleLogin}/> : <Redirect to='/login'/>
       }}/>
 
       <Route exact path='/dogs' render={(props) => {

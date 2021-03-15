@@ -129,3 +129,9 @@
     max-width: 100%;
 }
 
+.carousel-position{
+    margin: 2% 25%;
+    min-height: 50%;
+    position: absolute;
+    width: 50%;
+}
