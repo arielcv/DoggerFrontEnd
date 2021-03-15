@@ -14,7 +14,7 @@ function DashboardWalkers({user}) {
   useEffect(async () => {
     const walkers = await getWalkers();
     if (walkers) setWalkers(walkers);
-    const dogs = await getDogsByOwner(user.name);
+    const dogs = await getDogsByOwner(user.id);
     if (dogs) setDogs(dogs);
   }, []);
 

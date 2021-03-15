@@ -50,7 +50,7 @@ function App() {
       <ToastContainer/>
       <NavBar user={user} logout={handleLogout}/>
       <Route path='/profile' render={(props) => {
-        return user ? <Profile user={user}/> : <Redirect to='/login'/>
+        return user ? <Profile user={user} handleLogin = {handleLogin}/> : <Redirect to='/login'/>
       }}/>
       <Route exact path='/dogs' render={(props) => {
         return user ? <DashboardDogs history={props.history} user={user}/> : <Redirect to='/login'/>

@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 import Alert from 'react-bootstrap/Alert'
 import {DatePicker} from 'react-widgets'
-import {getConstraints,removeConstraints} from "../utils/services";
+import {editOwnerProfile, editWalkerProfile, getConstraints, removeConstraints} from "../utils/services";
 import AddConstraint from "./addConstraint";
+import {toast} from "react-toastify";
 
-function Profile({user}) {
+function Profile({user, handleLogin}) {
 
   const [dataProfile, setDataProfile] = useState(user);
   const [addConstraint, setAddConstraint] = useState(false);
@@ -22,31 +23,43 @@ function Profile({user}) {
     validate(current);
   };
 
-  const validate = (profile) => {
+  const validate = () => {
     const errorArray = {};
-    if (profile.birthDate) {
-      const currentYear = profile.birthDate.getFullYear();
+    if (dataProfile.birthDate) {
+      const currentYear = dataProfile.birthDate.getFullYear();
       const minAge = 16;
       const minYear = new Date().getFullYear() - minAge;
-      if (currentYear > minYear){
+      if (currentYear > minYear) {
         errorArray.birthDate = 'The min age required is 16';
       }
     }
     setErrors(errorArray);
+    return Object.keys(errorArray).length;
+  };
+
+  const handleSubmit = () => {
+    if (validate() === 0) {
+      let data = '';
+      if (user.role === 'owner') {
+        data = editOwnerProfile(user.id)
+      } else if (user.role === 'walker') {
+        data = editWalkerProfile(user.id)
+      }
+      if (data) handleLogin(dataProfile)
+    } else {
+      toast.error('There are some errors in your profile')
+    }
   };
 
   const fetchConstraints = async () => {
     setShowConstraints(!showConstraints);
-    try {
-      if (!showConstraints) {
-        const {data} = await getConstraints(user.name);
-        console.log(data);
-        setConstraints(data)
-      }
-    } catch (e) {
-      console.log('Error')
+    if (!showConstraints) {
+      const data = await getConstraints(user.id);
+      console.log(data);
+      setConstraints(data)
     }
   };
+
 
   const handleAddConstraints = async (constraint) => {
     const updatedConstraints = [...constraints, ...constraint];
@@ -56,19 +69,16 @@ function Profile({user}) {
 
   const handleRemoveConstraints = async (id) => {
     const updatedConstraints = constraints.filter(c => c.id !== id);
-    try {
-      await removeConstraints(id);
-      setConstraints(updatedConstraints)
-    } catch (e) {
-      console.log(e.response.error)
-    }
+    const response = await removeConstraints(id);
+    if (response) setConstraints(updatedConstraints)
+
   };
 
   const handleShow = () => {
     setShowConstraints(!showConstraints)
   };
 
-  const row = ({id,start, end, sizesAllowed}) => (
+  const row = ({id, start, end, sizesAllowed}) => (
     <tr key={id}>
       <th>{start}</th>
       <th>{end}</th>
@@ -82,7 +92,6 @@ function Profile({user}) {
   );
 
   const constraint = (data) => {
-    console.log(data);
     return data.map((c) => row(c))
   };
 
@@ -104,30 +113,30 @@ function Profile({user}) {
             <Alert.Heading>You are a dog {user.role}</Alert.Heading>
           </Alert>
 
-          {user.role === 'walker' &&<div>
+          {user.role === 'walker' && <div>
             <div style={{margin: '1% 0'}}>
               <button className='btn btn-success ' onClick={() => fetchConstraints()}>Show Constraints
               </button>
             </div>
             <Alert show={showConstraints} variant="warning">
               <Alert.Heading>Constraints</Alert.Heading>
-              <table className='table' style={{color:'gray',textAlign:"center"}}>
+              <table className='table' style={{color: 'gray', textAlign: "center"}}>
                 <th>Start</th>
                 <th>End</th>
                 <th>Allowed sizes in this period</th>
                 <th>Actions</th>
-                {constraint(constraints)}
+                {constraints && constraint(constraints)}
               </table>
               <div>
                 <button className='btn btn-outline-danger btn-block'
-                        style={{width:'20%',margin:'auto'}}
+                        style={{width: '20%', margin: 'auto'}}
                         onClick={() => setAddConstraint(!addConstraint)}
                 >
                   Add a constraint
                 </button>
-                <AddConstraint show ={addConstraint}
-                               handleShow = {handleShow}
-                               name = {dataProfile.name}
+                <AddConstraint show={addConstraint}
+                               handleShow={handleShow}
+                               name={dataProfile.name}
                                handleAdd={(data) => handleAddConstraints(data)}
                 />
               </div>
@@ -143,21 +152,22 @@ function Profile({user}) {
                       onChange={(e) => handleInput(e.target.value, e.target.id)}
             />
           </div>
-          {/*{errors.username && <p className='formError'>{errors.username}</p>}*/}
 
 
           <div className="form-group">
             <label htmlFor="bithdate">Birthdate</label>
             <DatePicker onChange={(e) => handleInput(e, 'birthDate')}
-                        value = {(dataProfile.birthDate) ? dataProfile.birthDate: new Date(1900, 1, 1)}
-                        min = {new Date(1900, 1, 1)}
-                        max = {new Date()}
+                        value={(dataProfile.birthDate) ? dataProfile.birthDate : null}
+                        min={new Date(1900, 1, 1)}
+                        max={new Date()}
+                        def
             />
           </div>
           {errors.birthDate && <p className='formError'>{errors.birthDate}</p>}
 
           <button className="btn btn-primary"
                   style={{maxWidth: '50%'}}
+                  onClick={handleSubmit}
           >
             Save changes
           </button>
