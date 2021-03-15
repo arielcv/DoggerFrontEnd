@@ -34,7 +34,7 @@ function WalkerCard({data, handleSelection}) {
 
 
   return (
-    <div className={`card custom-card ${(over) ? "borderTrue" : ""}`}
+    <div className={`card ${(over) ? "borderTrue" : ""}`}
          onClick={handleSelection}
          onMouseOver={() => (setOver(true))}
          onMouseLeave={() => (setOver(false))}
@@ -43,6 +43,7 @@ function WalkerCard({data, handleSelection}) {
       <div className="card-header d-inline-flex"> {data.email}</div>
       {data.bio && <div className="card-body"> {data.bio}</div>}
       {data.birthdate && <div className="card-footer"> {data.birthdate}</div>}
+      <div> Constraints </div>
       {constraints.map(constraint => walkerConstraints(constraint))}
     </div>
   );

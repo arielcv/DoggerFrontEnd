@@ -1,12 +1,27 @@
-import React from 'react';
+import React,{useState, useEffect} from 'react';
 import useForm from '../hooks/useForm'
 import {Link} from 'react-router-dom'
 import {toast} from "react-toastify";
+import owner from "../imgs/owners.jpg"
+import walkers from "../imgs/walkers.jpg"
 
 export default function Registration(props) {
 
-  const {inputs, handleInputChange, handleSubmit , errors} = useForm(
+  const {inputs, handleInputChange, handleSubmit, errors} = useForm(
     {username: '', email: '', password: '', role: '', repeatPassword: ''});
+  const [focusOwner, setFocusOwner] = useState(false);
+  const [focusWalker, setFocusWalker] = useState(false);
+
+  useEffect(() => {
+    if (inputs.role === 'owner') {
+      setFocusOwner(true);
+      setFocusWalker(false)
+    }
+    if (inputs.role === 'walker') {
+      setFocusOwner(false);
+      setFocusWalker(true)
+    }
+  }, [inputs]);
 
   const handleButton = async (e) => {
     e.preventDefault();
@@ -20,6 +35,11 @@ export default function Registration(props) {
 
   return (
     <div className="text-center justify-content-center align-items-center" style={{display: 'flex'}}>
+      <div className='col-4'><img className={(focusOwner) ? 'transition' : ''}
+                                  src={owner}
+                                  width={300}
+                                  height={200}
+      /></div>
       <form className="col-3 card registrationBox align-items-center"
             onSubmit={(e) => handleButton(e)}
       >
@@ -86,13 +106,18 @@ export default function Registration(props) {
         </div>
 
         <button className="btn btn-primary"
-                style={{maxWidth: '50%', margin:"2% 0"}}
+                style={{maxWidth: '50%', margin: "2% 0"}}
                 type={"submit"}
         >
           Register
         </button>
         <Link to='login'><a> If you already have an account click here!</a> </Link>
       </form>
+      <div className='col-4'><img className={(focusWalker) ? 'transition' : ''}
+                                  src={walkers}
+                                  width={300}
+                                  height={200}
+      /></div>
     </div>
   );
 }
