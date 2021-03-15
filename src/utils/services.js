@@ -14,13 +14,12 @@ export const login = async (user, password) => {
     localStorage.setItem('user', user);
     return await getProfileDetails(user)
   } catch (e) {
-    if (e.response){
-      toast.error(e.response.data);
-      console.log(e.response.data);
-    }
-    return false
+    toast.error('There was some error');
+    console.log(e);
   }
+  return false
 };
+
 
 export const editWalkerProfile = async (walkerId, bio, birthdate) => {
   try {
