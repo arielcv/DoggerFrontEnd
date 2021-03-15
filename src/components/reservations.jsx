@@ -42,13 +42,15 @@ function Reservations({user}) {
   const handleCancelReservation = async (reservationId) => {
     const data = await cancelReservation(reservationId);
     console.log(data);
-    if (data.walker) {
-      const updated = reservationsAssigned.filter(r => r.id !== reservationId);
-      console.log(updated);
-      setReservationsAssigned(updated)
-    } else {
-      const updated = reservationsUnassigned.filter(r => r.id !== reservationId);
-      setReservationsUnassigned(updated)
+    if (data){
+      if (data.walker) {
+        const updated = reservationsAssigned.filter(r => r.id !== reservationId);
+        console.log(updated);
+        setReservationsAssigned(updated)
+      } else{
+        const updated = reservationsUnassigned.filter(r => r.id !== reservationId);
+        setReservationsUnassigned(updated)
+      }
     }
   };
 
@@ -124,7 +126,7 @@ function Reservations({user}) {
   };
 
   const handleAcceptReservation = async (id) => {
-    const data = await acceptReservation(id, user.name);
+    const data = await acceptReservation(id, user.id);
     if (data) {
       setReservationsUnassigned(reservationsUnassigned.filter(r => r.id !== id));
       setReservationsAssigned([...reservationsAssigned, data]);

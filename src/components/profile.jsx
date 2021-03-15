@@ -61,7 +61,8 @@ function Profile({user, handleLogin}) {
   };
 
 
-  const handleAddConstraints = async (constraint) => {
+  const handleAddConstraints = (constraint) => {
+    console.log(constraint);
     const updatedConstraints = [...constraints, ...constraint];
     setConstraints(updatedConstraints)
   };
@@ -137,7 +138,8 @@ function Profile({user, handleLogin}) {
                 <AddConstraint show={addConstraint}
                                handleShow={handleShow}
                                name={dataProfile.name}
-                               handleAdd={(data) => handleAddConstraints(data)}
+                               id = {dataProfile.id}
+                               handleAdd={handleAddConstraints}
                 />
               </div>
             </Alert>

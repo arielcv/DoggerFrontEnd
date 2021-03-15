@@ -62,13 +62,14 @@ export const editOwnerProfile = async (ownerId, bio, birthdate) => {
 
 export const getWalkers = async () => {
   try {
-    const {data} = await axios.get(baseURL.urlAPI + 'walkers/', {
+    const {data} = await axios.get(`${baseURL.urlAPI}walkers/`, {
       headers: {
         'Authorization': `${localStorage.getItem('Authorization')}`
       }
     });
     return data
   } catch (e) {
+    console.log(e);
     toast.error(e.response.data);
     return false
   }
@@ -76,7 +77,7 @@ export const getWalkers = async () => {
 
 export const getProfileDetails = async (user) => {
   try {
-    const {data} = await axios.get(baseURL.urlAPI + 'users/' + user, {
+    const {data} = await axios.get(`${baseURL.urlAPI}users/${user}`, {
       headers: {
         'Authorization': `${localStorage.getItem('Authorization')}`
       }
@@ -91,7 +92,7 @@ export const getProfileDetails = async (user) => {
 
 export const getDogsByOwner = async (ownerId) => {
   try {
-    const {data} = await axios.get(baseURL.urlAPI + 'dogs/owner/' + ownerId, {
+    const {data} = await axios.get(`${baseURL.urlAPI}dogs/owner/${ownerId}`, {
       headers: {
         'Authorization': `${localStorage.getItem('Authorization')}`
       }
@@ -105,7 +106,7 @@ export const getDogsByOwner = async (ownerId) => {
 
 export const createDog = async ({owner, name, size}) => {
   try {
-    const {data} = await axios.post(baseURL.urlAPI + 'dogs/',
+    const {data} = await axios.post(`${baseURL.urlAPI}dogs/`,
       {owner, name, size},
       {
         headers: {
@@ -121,7 +122,7 @@ export const createDog = async ({owner, name, size}) => {
 
 export const updateDog = async ({id, name, size}) => {
   try {
-    const {data} = await axios.post(baseURL.urlAPI + 'dogs/' + id + '/',
+    const {data} = await axios.post(`${baseURL.urlAPI}dogs/${id}/`,
       {name, size},
       {
         headers: {
@@ -138,7 +139,7 @@ export const updateDog = async ({id, name, size}) => {
 
 export const deleteDog = async (id) => {
   try {
-    const {data} = await axios.delete(baseURL.urlAPI + 'dogs/' + id + '/',
+    const {data} = await axios.delete(`${baseURL.urlAPI}dogs/${id}/`,
       {
         headers: {
           'Authorization': `${localStorage.getItem('Authorization')}`
@@ -154,7 +155,7 @@ export const deleteDog = async (id) => {
 
 export const sendReservationByWalker = async (walkerId, start, end, dogId) => {
   try {
-    const {data} = await axios.post(baseURL.urlAPI + 'walkers/reservation/' + walkerId + '/',
+    const {data} = await axios.post(`${baseURL.urlAPI}walkers/reservation/${walkerId}`,
       {start, end, dogId},
       {
         headers: {
@@ -168,8 +169,10 @@ export const sendReservationByWalker = async (walkerId, start, end, dogId) => {
       e.response.data.map(error => toast.error(error))
     } else if (e.response.status === 403) {
       toast.error("The walker can't accept your reservation because it isn't in her/his constraints");
+    } else if (e.response.status === 404){
+      toast.error('The walker can\'t accept your reservation because the during is greater than allowed')
     } else if (e.response.status === 406) {
-      toast.error("The walker can't accept your reservation because he is busy at that time ");
+      toast.error("The walker can't accept your reservation because he is busy at that time");
     } else {
       console.log(e.response.data);
       toast.error("Server error");
@@ -180,7 +183,7 @@ export const sendReservationByWalker = async (walkerId, start, end, dogId) => {
 
 export const getReservationByWalker = async (walkerId) => {
   try {
-    const {data} = await axios.get(baseURL.urlAPI + 'walkers/reservation/' + walkerId,
+    const {data} = await axios.get(`${baseURL.urlAPI}walkers/reservation/${walkerId}`,
       {
         headers: {
           'Authorization': `${localStorage.getItem('Authorization')}`
@@ -203,7 +206,7 @@ export const getReservationByWalker = async (walkerId) => {
 
 export const getReservationByOwner = async (ownerId) => {
   try {
-    const {data} = await axios.get(baseURL.urlAPI + 'owners/reservation/' + ownerId + "/",
+    const {data} = await axios.get(`${baseURL.urlAPI}owners/reservation/${ownerId}/`,
       {
         headers: {
           'Authorization': `${localStorage.getItem('Authorization')}`
@@ -226,7 +229,7 @@ export const getReservationByOwner = async (ownerId) => {
 
 export const sendReservationToAll = async (ownerId, start, end, dogId) => {
   try {
-    const {data} = await axios.post(baseURL.urlAPI + 'walkers/reservation/',
+    const {data} = await axios.post(`${baseURL.urlAPI}walkers/reservation/`,
       {ownerId, start, end, dogId},
       {
         headers: {
@@ -249,7 +252,7 @@ export const sendReservationToAll = async (ownerId, start, end, dogId) => {
 
 export const confirmReservation = async (walkerId, reservationId) => {
   try {
-    const {data} = await axios.patch(baseURL.urlAPI + 'reservation/' + reservationId + "/",
+    const {data} = await axios.patch(`${baseURL.urlAPI}reservation/${reservationId}/`,
       {walkerId},
       {
         headers: {
@@ -265,10 +268,10 @@ export const confirmReservation = async (walkerId, reservationId) => {
   }
 };
 
-export const acceptReservation = async (id, walker) => {
+export const acceptReservation = async (reservationId, walkerId) => {
   try {
-    const {data} = await axios.patch(baseURL.urlAPI + 'reservation/' + id + '/',
-      {walker},
+    const {data} = await axios.patch(`${baseURL.urlAPI}reservation/reservationId/`,
+      {walkerId},
       {
         headers: {
           'Authorization': `${localStorage.getItem('Authorization')}`
@@ -283,9 +286,9 @@ export const acceptReservation = async (id, walker) => {
   }
 };
 
-export const createConstraints = async (walker, start, end, sizesAllowed) => {
+export const createConstraints = async (walkerId, start, end, sizesAllowed) => {
   try {
-    const {data} = await axios.post(baseURL.urlAPI + 'walkers/' + walker + '/' + 'constraints/',
+    const {data} = await axios.post(`${baseURL.urlAPI}walkers/constraints/${walkerId}/`,
       {start, end, sizesAllowed},
       {
         headers: {

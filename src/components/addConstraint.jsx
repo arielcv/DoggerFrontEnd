@@ -3,7 +3,7 @@ import {TimePicker, Multiselect} from "react-widgets";
 import {Collapse} from "react-bootstrap";
 import {createConstraints} from "../utils/services";
 
-function AddConstraint({show, handleShow, name, handleAdd}) {
+function AddConstraint({show, id, handleAdd}) {
 
   const [data, setData] = useState({start: '', end: '', sizesAllowed: []});
   const [errors, setErrors] = useState('');
@@ -59,8 +59,9 @@ function AddConstraint({show, handleShow, name, handleAdd}) {
   };
 
   const handleCreateConstraint = async () => {
-      const response = await createConstraints(name, data.start, data.end, data.sizesAllowed);
-      if (response) handleAdd(response.data);
+    const response = await createConstraints(id, data.start, data.end, data.sizesAllowed);
+    console.log(response);
+    if (response) handleAdd(response);
   };
 
   return (
