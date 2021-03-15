@@ -134,8 +134,9 @@ export const sendReservationByWalker = async (walkerId, start, end, dogId) => {
     } else if (e.response.status === 403) {
       toast.error("The walker can't accept your reservation because it isn't in her/his constraints");
     } else if (e.response.status === 406) {
-      toast.error("The walker can't accept your reservation because this time is busy");
+      toast.error("The walker can't accept your reservation because he is busy at that time ");
     } else {
+      console.log(e.response.data);
       toast.error("Server error");
     }
     return false

@@ -21,14 +21,14 @@ function Reservations({user}) {
     }
   }, []);
 
-  const row = ({id, start, end, dog, owner, confirmed}, assigned) => (
+  const row = ({id, start, end, dog, owner, walker, confirmed,...rest}, assigned) => (
     <tr key={id}>
-      {console.log(1)}
       <td>{start}</td>
       <td>{end}</td>
       <td>{dog.name}</td>
       <td>{dog.size.toUpperCase()}</td>
-      <td>{owner.name}</td>
+      {(user.role === 'walker') && <td>{owner.name}</td>}
+      {(user.role === 'owner') && <td>{(walker) ? (walker.name) : "Unassigned"}</td>}
       <td>{(confirmed) ? <i className='fa fa-2x fa-check-circle text-success'/> :
         <i className='fa fa-2x fa-clock-o text-warning' style={{padding: '5%'}}/>}
       </td>
@@ -66,8 +66,7 @@ function Reservations({user}) {
         <th>State</th>
         <th>Actions</th>
       </tr>
-      {console.log('assigned', reservationsAssigned)}
-      {console.log('unassigned', reservationsUnassigned)}
+      {console.log(reservationsUnassigned,reservationsAssigned)}
       {(reservationsAssigned.length !== 0) ? <th colSpan={7}>Assigned Reservations</th> :
         <th colSpan={7}>There are no assigned reservations </th>}
       {(reservationsAssigned.length !== 0) ? reservationsAssigned.map(r => row(r, true)) : ''}
