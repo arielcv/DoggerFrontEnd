@@ -9,7 +9,7 @@ import SelectDog from "./selectDog";
 function DateTimeReservation({userId, walkerId, dogs, submitText, target, ...props}) {
   const [mode, setMode] = useState(false);
   const [reservation, setReservation] = useState({start: null, end: null, selectedDogId: null});
-  const [errors, setErrors] = useState({start: "", end: ""});
+  const [errors, setErrors] = useState({start: "", end: "",selectedDogId:""});
 
   const handleStart = value => {
     console.log(value);
@@ -42,7 +42,7 @@ function DateTimeReservation({userId, walkerId, dogs, submitText, target, ...pro
       errorArray.end = 'True';
     }
     if (!reservation.selectedDogId) {
-      errorArray.selectedDog = 'True';
+      errorArray.selectedDogId = 'True';
     }
     setErrors(errorArray);
     return Object.keys(errorArray).length;
@@ -59,9 +59,11 @@ function DateTimeReservation({userId, walkerId, dogs, submitText, target, ...pro
         } else if (target === 'single') {
           response = await sendReservationByWalker(walkerId, reservation.start, reservation.end, reservation.selectedDogId);
         }
-        if (response) toast.success("Your reservation was created");
-        setReservation({start: null, end: null, selectedDogId: null});
-        setMode(false);
+        if (response) {
+          toast.success("Your reservation was created");
+          setReservation({start: null, end: null, selectedDogId: null});
+          setMode(false);
+        }
       }
     }
 
