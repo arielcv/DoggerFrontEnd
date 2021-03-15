@@ -19,6 +19,7 @@ function LoginForm({handleLogin, ...props}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('a')
     const {username, password} = state;
     const data = await login(username, password);
     if (data){

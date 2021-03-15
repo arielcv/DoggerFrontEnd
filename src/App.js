@@ -16,6 +16,8 @@ import './App.css';
 import DashboardDogs from "./components/dashboardDogs";
 import Reservations from "./components/reservations";
 import {getProfileDetails} from "./utils/services";
+import MainUnlogged from "./components/mainUnlogged";
+import MainLogged from "./components/mainLogged";
 
 
 function App() {
@@ -48,25 +50,37 @@ function App() {
   return (
     <div>
       <ToastContainer/>
-      <NavBar user={user} logout={handleLogout}/>
+
+      {user && <NavBar user={user} logout={handleLogout}/>}
+
+      <Route exact path={'/'} render ={(props) => {
+        return user ? <MainLogged/> :<MainUnlogged/>
+      }}/>
+
       <Route path='/profile' render={(props) => {
         return user ? <Profile user={user} handleLogin = {handleLogin}/> : <Redirect to='/login'/>
       }}/>
+
       <Route exact path='/dogs' render={(props) => {
         return user ? <DashboardDogs history={props.history} user={user}/> : <Redirect to='/login'/>
       }}/>
+
       <Route path='/walkers' render={(props) => {
         return user ? <DashboardWalkers user={user}/> : <Redirect to='/login'/>
       }}/>
+
       <Route path='/walker-reservations' render={(props) => {
         return user.role === 'walker' ? <Reservations user={user}/> : <Redirect to='/login'/>
       }}/>
+
       <Route path='/owner-reservations' render={(props) => {
         return user.role === 'owner' ? <Reservations user={user}/> : <Redirect to='/login'/>
       }}/>
+
       <Route path='/registration' render={(props) => {
         return (user) ? <Profile user={user}/> : <Registration{...props}/>
       }}/>
+
       <Route path='/login' render={(props) => {
         return (user) ? <Redirect to='/profile'/> : <LoginForm {...props} handleLogin={handleLogin}/>
       }}/>
