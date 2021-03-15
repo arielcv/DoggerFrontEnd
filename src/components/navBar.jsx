@@ -1,40 +1,78 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
+import profileLogo from '../imgs/profileLogo.png'
+import dogLogo from '../imgs/dogLogo.png'
+import reservationsLogo from '../imgs/reservationsLogo.png'
+import walkerLogo from '../imgs/walkerLogo.png'
 
 function NavBar({user, logout}) {
 
   return (
-    <nav className="navbar navbar-expand-sm bg-light">
-      <i className='fa fa-4x fa-paw text-break'/>
+    <nav className="navbar navbar-expand-sm custom-navbar">
+      <div>
+        <i className='fa fa-4x fa-paw'/>
+        <h3>Dogger</h3>
+      </div>
       <ul className="navbar-nav flex-row col-8">
-        {user && <li className="nav-item col-2">
-          <Link to={'/profile'}>My Profile</Link>
-        </li>}
-        {user.role === 'owner' && <li className="nav-item col-2">
-          <Link to={"/dogs"}>My dogs</Link>
-        </li>}
-        {user.role === 'owner' && <li className="nav-item col-2">
-          <Link to={"/owner-reservations"}>My reservations</Link>
-        </li>}
-        {user.role === 'walker' && <li className="nav-item col-2">
-          <Link to={"/walker-reservations"}>My reservations</Link>
-        </li>}
-        {user.role === 'owner' && <li className="nav-item col-2">
-          <Link to={"/walkers"}>Walkers</Link>
-        </li>}
+
+        {user && <div className='nav-item col-3'>
+          <li className="nav-item text-lg-center">
+            <Link className = 'btn btn-dark' to={'/profile'}>My Profile</Link>
+          </li>
+          <div className='profile-logo-container'>
+            <img className='profile-logo' src={profileLogo}/>
+          </div>
+        </div>}
+
+        {user.role === 'owner' && <div className='nav-item col-3'>
+          <li className="nav-item text-lg-center">
+            <Link className = 'btn btn-dark' to={"/dogs"}>My dogs</Link>
+          </li>
+          <div className='profile-logo-container'>
+            <img className='profile-logo' src={dogLogo}/>
+          </div>
+        </div>}
+
+        {user.role === 'owner' && <div className='nav-item col-3'>
+          <li className="nav-item text-lg-center">
+            <Link className = 'btn btn-dark' to={"/owner-reservations"}>My reservations</Link>
+          </li>
+          <div className='profile-logo-container'>
+            <img className='profile-logo' src={reservationsLogo}/>
+          </div>
+        </div>}
+
+        {user.role === 'walker' && <div className='nav-item col-3'>
+          <li className="nav-item text-lg-center">
+            <Link className = 'btn btn-dark' to={"/walker-reservations"}>My reservations</Link>
+          </li>
+          <div className='profile-logo-container'>
+            <img className='profile-logo' src={reservationsLogo}/>
+          </div>
+        </div>}
+
+        {user.role === 'owner' && <div className='nav-item col-3'>
+          <li className="nav-item text-lg-center">
+            <Link className = 'btn btn-dark' to={"/walkers"}>Walkers</Link>
+          </li>
+          <div className='profile-logo-container'>
+            <img className='profile-logo' src={walkerLogo}/>
+          </div>
+        </div>}
+
       </ul>
       <ul className="nav navbar-nav justify-content-end align-content-between" style={{width: '80%'}}>
         <li className='align-items-end'>
-          {user ? `Hello ${user.name}` :
-            <Link to='/login'>Hello. You are not logged. Please login to enjoy our services</Link>}
+          {user ? <h3>{`Hello ${user.name}`}</h3> :
+            <Link className = 'btn btn-primary' to='/login'>Hello. You are not logged. Please login to enjoy our services</Link>}
         </li>
         <li>
-          {user ? <a className='fa fa-power-off'
+          {user ? <button className='fa fa-power-off btn btn-outline-dark'
                      style={{
                        'marginLeft': '10px', cursor: 'pointer'
                      }}
                      onClick={() => logout()}
-          > Log off</a> : null}
+          > Log off</button> : null}
         </li>
       </ul>
     </nav>

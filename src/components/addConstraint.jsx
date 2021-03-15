@@ -59,13 +59,8 @@ function AddConstraint({show, handleShow, name, handleAdd}) {
   };
 
   const handleCreateConstraint = async () => {
-    try {
       const response = await createConstraints(name, data.start, data.end, data.sizesAllowed);
-      console.log(response);
-      handleAdd(response.data);
-    } catch (e) {
-      console.log(e);
-    }
+      if (response) handleAdd(response.data);
   };
 
   return (

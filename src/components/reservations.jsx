@@ -21,21 +21,23 @@ function Reservations({user}) {
     }
   }, []);
 
-  const row = ({id, start, end, dog, owner, confirmed}, assigned) => (
-    <tr key={id}>
-      {console.log(1)}
+  const row = ({id: reservationId, start, end, dog, owner, walker, confirmed, ...rest}, assigned) => (
+    <tr key={reservationId}>
       <td>{start}</td>
       <td>{end}</td>
       <td>{dog.name}</td>
       <td>{dog.size.toUpperCase()}</td>
-      <td>{owner.name}</td>
+      {(user.role === 'walker') && <td>{owner.name}</td>}
+      {(user.role === 'owner') && <td>{(walker) ? (walker.name) : "Unassigned"}</td>}
       <td>{(confirmed) ? <i className='fa fa-2x fa-check-circle text-success'/> :
         <i className='fa fa-2x fa-clock-o text-warning' style={{padding: '5%'}}/>}
       </td>
       <th>
         {user.role === 'walker' && <button className='btn btn-outline-success btn-actions'
                                            disabled={confirmed}
-                                           onClick={(assigned) ? () => handleConfirmReservation(id) : () => handleAcceptReservation(id)}
+                                           onClick={(assigned) ?
+                                             () => handleConfirmReservation(reservationId) :
+                                             () => handleAcceptReservation(reservationId)}
         >Accept
         </button>}
         {user.role === 'walker' && assigned && <button className='btn btn-outline-danger btn-actions'
@@ -66,8 +68,7 @@ function Reservations({user}) {
         <th>State</th>
         <th>Actions</th>
       </tr>
-      {console.log('assigned', reservationsAssigned)}
-      {console.log('unassigned', reservationsUnassigned)}
+      {console.log(reservationsUnassigned, reservationsAssigned)}
       {(reservationsAssigned.length !== 0) ? <th colSpan={7}>Assigned Reservations</th> :
         <th colSpan={7}>There are no assigned reservations </th>}
       {(reservationsAssigned.length !== 0) ? reservationsAssigned.map(r => row(r, true)) : ''}
@@ -83,27 +84,19 @@ function Reservations({user}) {
     return item
   };
 
-  const handleConfirmReservation = async (id) => {
-    try {
-      await confirmReservation(user.name, id);
-      const updatedReservations = reservationsAssigned.map(r => r.id === id ? setTrue(r, 'confirmed') : r);
-      setReservationsAssigned(updatedReservations);
-    } catch (e) {
-      console.log('Error');
+  const handleConfirmReservation = async (reservationId) => {
+    const data = await confirmReservation(user.id, reservationId);
+    if (data) {
+      const updatedReservations = reservationsAssigned.map(r => r.id === reservationId ? setTrue(r, 'confirmed') : r);
+      setReservationsAssigned(updatedReservations)
     }
   };
 
   const handleAcceptReservation = async (id) => {
-    try {
-      console.log(id);
-      const {data} = await acceptReservation(id, user.name);
-      console.log(reservationsUnassigned);
-      console.log(data);
-      console.log([...reservationsUnassigned, data]);
+    const data = await acceptReservation(id, user.name);
+    if (data) {
       setReservationsUnassigned(reservationsUnassigned.filter(r => r.id !== id));
       setReservationsAssigned([...reservationsAssigned, data]);
-    } catch (e) {
-      console.log('Error');
     }
   };
 

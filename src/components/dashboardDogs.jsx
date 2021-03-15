@@ -10,7 +10,7 @@ function DashboardDogs(props) {
   const [adding, setAdding] = useState(false);
 
   useEffect(async () => {
-    const dogs = await getDogsByOwner(props.user.name);
+    const dogs = await getDogsByOwner(props.user.id);
     if (dogs) setDogs(dogs);
   }, []);
 
