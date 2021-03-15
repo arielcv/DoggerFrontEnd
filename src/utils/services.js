@@ -14,7 +14,7 @@ export const login = async (user, password) => {
     localStorage.setItem('user', user);
     return await getProfileDetails(user)
   } catch (e) {
-    console.log(e.response);
+    console.log(e);
     if (e.response.status >= 400 && e.response.status < 500) {
       toast.error("Incorrect user or password")
     } else {
