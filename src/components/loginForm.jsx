@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Link} from "react-router-dom";
 import {login} from "../utils/services";
+import {toast} from "react-toastify";
 
 function LoginForm({handleLogin, ...props}) {
 
@@ -22,9 +23,15 @@ function LoginForm({handleLogin, ...props}) {
     const {username, password} = state;
     const data = await login(username, password);
     console.log(data);
-    if (data){
+    if (data) {
       handleLogin(data);
       props.history.replace('/');
+    } else {
+      if (e.response.status >= 400 && e.response.status < 500) {
+        toast.error("Incorrect user or password")
+      } else {
+        toast.error("There was an error in the server")
+      }
     }
   };
 
@@ -49,7 +56,7 @@ function LoginForm({handleLogin, ...props}) {
                  onChange={handleChange}
           />
         </div>
-        <button type="submit" className="btn btn-primary" >Login</button>
+        <button type="submit" className="btn btn-primary">Login</button>
         <Link to='registration'><a> If you have not account, create one here!</a></Link>
       </form>
     </div>

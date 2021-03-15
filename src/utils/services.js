@@ -15,11 +15,6 @@ export const login = async (user, password) => {
     return await getProfileDetails(user)
   } catch (e) {
     console.log(e);
-    if (e.response.status >= 400 && e.response.status < 500) {
-      toast.error("Incorrect user or password")
-    } else {
-      toast.error("There was an error in the server")
-    }
     return false
   }
 };
