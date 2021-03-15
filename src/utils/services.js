@@ -14,7 +14,10 @@ export const login = async (user, password) => {
     localStorage.setItem('user', user);
     return await getProfileDetails(user)
   } catch (e) {
-    console.log(e);
+    if (e.response){
+      toast.error(e.response.data);
+      console.log(e.response.data);
+    }
     return false
   }
 };

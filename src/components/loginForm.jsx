@@ -26,12 +26,6 @@ function LoginForm({handleLogin, ...props}) {
     if (data) {
       handleLogin(data);
       props.history.replace('/');
-    } else {
-      if (e.response.status >= 400 && e.response.status < 500) {
-        toast.error("Incorrect user or password")
-      } else {
-        toast.error("There was an error in the server")
-      }
     }
   };
 
