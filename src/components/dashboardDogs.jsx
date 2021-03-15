@@ -45,14 +45,11 @@ function DashboardDogs(props) {
 
   const handleDelete = async (id) => {
     console.log(id);
-    try {
-      const response = await deleteDog(id);
+    const response = await deleteDog(id);
+    if (response) {
       const arrayDogs = dogs.filter((dog) => dog.id !== id);
       setDogs(arrayDogs);
       setAdding(false);
-
-    } catch (e) {
-      return e.response.data;
     }
   };
 

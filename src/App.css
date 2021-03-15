@@ -28,8 +28,8 @@
 }
 
 .custom-card {
-    min-width: 20% !important;
-    max-width: 20% !important;
+    min-width: 50% !important;
+    max-width: 50% !important;
     margin: 15px 0;
 }
 
@@ -74,4 +74,11 @@
 
 .btn-actions{
     margin: 0 5%;
+}
+
+.constraint-card{
+    margin: auto;
+    width: 100%;
+    border-radius: 5px;
+    border: 2px gray solid;
 }
