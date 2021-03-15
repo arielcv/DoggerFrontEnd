@@ -84,8 +84,6 @@ export const getProfileDetails = async (user) => {
     });
     return data
   } catch (e) {
-    toast.error(e.response.data);
-    console.log(e.response.data);
     return false
   }
 };
