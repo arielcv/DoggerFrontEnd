@@ -102,57 +102,106 @@ export const updateDog = async ({id, name, size}) => {
 };
 
 export const deleteDog = async (id) => {
-  return await axios.delete(baseURL.urlAPI + 'dogs/' + id + '/',
-    {
-      headers: {
-        'Authorization': `${localStorage.getItem('Authorization')}`
+  try {
+    const {data} = await axios.delete(baseURL.urlAPI + 'dogs/' + id + '/',
+      {
+        headers: {
+          'Authorization': `${localStorage.getItem('Authorization')}`
+        }
       }
-    }
-  )
+    );
+    return data
+  } catch (e) {
+    console.log('Error');
+    return false
+  }
 };
 
 export const sendReservationByWalker = async (walkerId, start, end, dogId) => {
-  console.log(walkerId, start, end, dogId);
-  return await axios.post(baseURL.urlAPI + 'walkers/' + walkerId + '/' + 'reservation/',
-    {start, end, dogId},
-    {
-      headers: {
-        'Authorization': `${localStorage.getItem('Authorization')}`
+  try {
+    const {data} = await axios.post(baseURL.urlAPI + 'walkers/' + walkerId + '/' + 'reservation/',
+      {start, end, dogId},
+      {
+        headers: {
+          'Authorization': `${localStorage.getItem('Authorization')}`
+        }
       }
+    );
+    return data
+  } catch (e) {
+    if (e.response.status === 403) {
+      toast.error("The walker can't accept your reservation because it isn't in her/his constraints");
+    } else if (e.response.status === 406) {
+      toast.error("The walker can't accept your reservation because this time is busy");
+    } else {
+      toast.error("Server error");
     }
-  )
+    return false
+  }
 };
 
 export const getReservationByWalker = async (walker) => {
-  return await axios.get(baseURL.urlAPI + 'walkers/' + walker + '/' + 'reservation/',
-    {
-      headers: {
-        'Authorization': `${localStorage.getItem('Authorization')}`
+  try {
+    const {data} = await axios.get(baseURL.urlAPI + 'walkers/' + walker + '/' + 'reservation/',
+      {
+        headers: {
+          'Authorization': `${localStorage.getItem('Authorization')}`
+        }
       }
+    );
+    const response = {};
+    if (data[0]) {
+      response['assigned'] = data[0]
     }
-  )
+    if (data[1]) {
+      response['unassigned'] = data[1]
+    }
+    return response
+  } catch (e) {
+    console.log('Error');
+    return false
+  }
 };
 
-export const getReservationByOwner = async (walker) => {
-  return await axios.get(baseURL.urlAPI + 'owners/' + walker + '/' + 'reservation/',
-    {
-      headers: {
-        'Authorization': `${localStorage.getItem('Authorization')}`
+export const getReservationByOwner = async (ownerId) => {
+  try {
+    const {data} = await axios.get(baseURL.urlAPI + 'owners/' + ownerId + '/' + 'reservation/',
+      {
+        headers: {
+          'Authorization': `${localStorage.getItem('Authorization')}`
+        }
       }
+    );
+    const response = {};
+    if (data[0]) {
+      response['assigned'] = data[0]
     }
-  )
+    if (data[1]) {
+      response['unassigned'] = data[1]
+    }
+    return response
+  } catch (e) {
+    console.log('Error');
+    return false
+  }
 };
 
-export const sendReservationToAll = async (walker, start, end, dog) => {
-  console.log(walker, start, end, dog);
-  return await axios.post(baseURL.urlAPI + 'walkers/' + walker + '/' + 'reservation/',
-    {start, end, dog},
-    {
-      headers: {
-        'Authorization': `${localStorage.getItem('Authorization')}`
+export const sendReservationToAll = async (ownerId, start, end, dogId) => {
+  try {
+    const {data} = await axios.post(baseURL.urlAPI + 'walkers/reservation/',
+      {ownerId, start, end, dogId},
+      {
+        headers: {
+          'Authorization': `${localStorage.getItem('Authorization')}`
+        }
       }
-    }
-  )
+    );
+    return true
+  } catch (e) {
+    console.log(e)
+    return false
+  }
+
 };
 
 export const confirmReservation = async (walker, id) => {
@@ -192,13 +241,19 @@ export const createConstraints = async (walker, start, end, sizesAllowed) => {
 };
 
 export const getConstraints = async (walker) => {
-  return await axios.get(baseURL.urlAPI + 'walkers/' + walker + '/' + 'constraints/',
-    {
-      headers: {
-        'Authorization': `${localStorage.getItem('Authorization')}`
+  try {
+    const {data} = await axios.get(baseURL.urlAPI + 'walkers/' + walker + '/' + 'constraints/',
+      {
+        headers: {
+          'Authorization': `${localStorage.getItem('Authorization')}`
+        }
       }
-    }
-  )
+    );
+    return data
+  } catch (e) {
+    console.log('Error');
+    return false
+  }
 };
 
 export const removeConstraints = async (id) => {

@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom'
 import {sendReservationByWalker, sendReservationToAll} from "../utils/services";
 import SelectDog from "./selectDog";
 
-function DateTimeReservation({walkerId, dogs, submitText, target, ...props}) {
+function DateTimeReservation({userId, walkerId, dogs, submitText, target, ...props}) {
   const [mode, setMode] = useState(false);
   const [reservation, setReservation] = useState({start: null, end: null, selectedDogId: null});
   const [errors, setErrors] = useState({start: "", end: ""});
@@ -49,35 +49,22 @@ function DateTimeReservation({walkerId, dogs, submitText, target, ...props}) {
   };
 
   const handleSubmit = async () => {
+    console.log(reservation);
       if (validate(reservation)) {
         toast.error('There are some errors in your reservation');
       } else {
         let response = '';
-        try {
-          console.log(walkerId);
-          if (target === 'multiple') {
-            response = await sendReservationToAll(reservation.start, reservation.end, reservation.selectedDogId);
-          } else if (target === 'single'){
-            response = await sendReservationByWalker(walkerId,reservation.start, reservation.end, reservation.selectedDogId);
-          }
-          const {start, end} = response.data;
-          const startDate = new Date(start);
-          const endDate = new Date(end);
-          toast.success("Your reservation was created");
-          setReservation({start: null, end: null, selectedDogId: null});
-          setMode(false);
-        } catch
-          (e) {
-          if (e.response.status === 403) {
-            toast.error("The walker can't accept your reservation because it isn't in her/his constraints");
-          } else if (e.response.status === 406){
-            toast.error("The walker can't accept your reservation because this time is busy");
-          } else {
-            toast.error("Server error");
-          }
+        if (target === 'multiple') {
+          response = await sendReservationToAll(userId,reservation.start, reservation.end, reservation.selectedDogId);
+        } else if (target === 'single') {
+          response = await sendReservationByWalker(walkerId, reservation.start, reservation.end, reservation.selectedDogId);
         }
+        if (response) toast.success("Your reservation was created");
+        setReservation({start: null, end: null, selectedDogId: null});
+        setMode(false);
       }
     }
+
   ;
 
   return (

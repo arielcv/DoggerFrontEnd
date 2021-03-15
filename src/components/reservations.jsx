@@ -7,17 +7,17 @@ function Reservations({user}) {
   const [reservationsUnassigned, setReservationsUnassigned] = useState([]);
 
   useEffect(async () => {
-    try {
-      let reservations = '';
-      if (user.role === 'walker') {
-        reservations = await getReservationByWalker(user.name);
-      } else if (user.role === 'owner') {
-        reservations = await getReservationByOwner(user.name);
-      }
-      setReservationsAssigned([...reservations.data[0]]);
-      setReservationsUnassigned([...reservations.data[1]]);
-    } catch (e) {
-      console.log(e);
+    let response = {};
+    if (user.role === 'walker') {
+      response = await getReservationByWalker(user.id);
+    } else if (user.role === 'owner') {
+      response = await getReservationByOwner(user.id);
+    }
+    console.log(response);
+    if (response) {
+      console.log(response);
+      if (response.assigned) setReservationsAssigned([...response.assigned]);
+      if (response.unassigned) setReservationsUnassigned([...response.unassigned]);
     }
   }, []);
 
@@ -40,13 +40,13 @@ function Reservations({user}) {
         </button>}
         {user.role === 'walker' && assigned && <button className='btn btn-outline-danger btn-actions'
                                                        disabled={confirmed}
-                                                       // onClick={() => cancelReservation(id)}
+          // onClick={() => cancelReservation(id)}
         >
           Reject
         </button>}
         {user.role === 'owner' && <button className='btn btn-outline-danger btn-actions'
                                           disabled={confirmed}
-                                          // onClick={() => cancelReservation(id)}
+          // onClick={() => cancelReservation(id)}
         >
           Cancel
         </button>}
@@ -66,11 +66,11 @@ function Reservations({user}) {
         <th>State</th>
         <th>Actions</th>
       </tr>
-      {console.log('assigned',reservationsAssigned)}
-      {console.log('unassigned',reservationsUnassigned)}
+      {console.log('assigned', reservationsAssigned)}
+      {console.log('unassigned', reservationsUnassigned)}
       {(reservationsAssigned.length !== 0) ? <th colSpan={7}>Assigned Reservations</th> :
         <th colSpan={7}>There are no assigned reservations </th>}
-      {(reservationsAssigned.length !== 0) ? reservationsAssigned.map(r => row(r,true)) : ''}
+      {(reservationsAssigned.length !== 0) ? reservationsAssigned.map(r => row(r, true)) : ''}
       <tr/>
       {(reservationsUnassigned.length !== 0) ? <th colSpan={7}>Unassigned Reservations</th> :
         <th colSpan={7}>There are no unassigned reservations </th>}
@@ -96,12 +96,12 @@ function Reservations({user}) {
   const handleAcceptReservation = async (id) => {
     try {
       console.log(id);
-      const {data} = await acceptReservation(id,user.name);
+      const {data} = await acceptReservation(id, user.name);
       console.log(reservationsUnassigned);
       console.log(data);
       console.log([...reservationsUnassigned, data]);
       setReservationsUnassigned(reservationsUnassigned.filter(r => r.id !== id));
-      setReservationsAssigned([...reservationsAssigned,data]);
+      setReservationsAssigned([...reservationsAssigned, data]);
     } catch (e) {
       console.log('Error');
     }
