@@ -329,7 +329,25 @@ export const removeConstraints = async (id) => {
     toast.success('Your constraint has been removed succesfully');
     return data
   } catch (e) {
-    toast.error('Your constraint has been removed succesfully');
+    toast.error('There was some problems removing your constraint');
+    return false
+  }
+};
+
+export const cancelReservation = async (reservationId) => {
+  try {
+    console.log(reservationId);
+    const {data} = await axios.delete(baseURL.urlAPI + 'reservation/' + reservationId,
+      {
+        headers: {
+          'Authorization': `${localStorage.getItem('Authorization')}`
+        }
+      }
+    );
+    toast.success('Your reservation has been canceled succesfully');
+    return data
+  } catch (e) {
+    toast.error('There was some problems canceling your reservation');
     return false
   }
 };

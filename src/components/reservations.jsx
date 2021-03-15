@@ -1,5 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {getReservationByWalker, getReservationByOwner, confirmReservation, acceptReservation} from "../utils/services";
+import {
+  getReservationByWalker,
+  getReservationByOwner,
+  confirmReservation,
+  acceptReservation,
+  cancelReservation
+} from "../utils/services";
 
 function Reservations({user}) {
 
@@ -33,6 +39,19 @@ function Reservations({user}) {
     return [datetime.toLocaleDateString(), datetime.toLocaleTimeString()]
   };
 
+  const handleCancelReservation = async (reservationId) => {
+    const data = await cancelReservation(reservationId);
+    console.log(data);
+    if (data.walker) {
+      const updated = reservationsAssigned.filter(r => r.id !== reservationId);
+      console.log(updated);
+      setReservationsAssigned(updated)
+    } else {
+      const updated = reservationsUnassigned.filter(r => r.id !== reservationId);
+      setReservationsUnassigned(updated)
+    }
+  };
+
   const row = ({id: reservationId, start, end, dog, owner, walker, confirmed, ...rest}, assigned) => (
     <tr key={reservationId}>
 
@@ -60,6 +79,7 @@ function Reservations({user}) {
         </button>}
         {user.role === 'owner' && <button className='btn btn-outline-danger btn-actions'
                                           disabled={confirmed}
+                                          onClick={() => handleCancelReservation(reservationId)}
         >
           Cancel
         </button>}
