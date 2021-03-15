@@ -20,7 +20,9 @@ export default function Registration(props) {
 
   return (
     <div className="text-center justify-content-center align-items-center" style={{display: 'flex'}}>
-      <div className="col-3 card registrationBox align-items-center">
+      <form className="col-3 card registrationBox align-items-center"
+            onSubmit={(e) => handleButton(e)}
+      >
 
         <div className="form-group">
           <label htmlFor="username">Username</label>
@@ -84,13 +86,13 @@ export default function Registration(props) {
         </div>
 
         <button className="btn btn-primary"
-                style={{maxWidth: '50%'}}
-                onClick={handleButton}
+                style={{maxWidth: '50%', margin:"2% 0"}}
+                type={"submit"}
         >
           Register
         </button>
         <Link to='login'><a> If you already have an account click here!</a> </Link>
-      </div>
+      </form>
     </div>
   );
 }

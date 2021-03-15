@@ -29,7 +29,7 @@ function LoginForm({handleLogin, ...props}) {
 
   return (
     <div className="text-center justify-content-center align-items-center" style={{display: 'flex'}}>
-      <div className="col-3 card registrationBox align-items-center">
+      <form onSubmit={e => handleSubmit(e)} className="col-3 card registrationBox align-items-center">
         <div className="form-group">
           <label htmlFor="username">Username:</label>
           <input type="text"
@@ -48,9 +48,9 @@ function LoginForm({handleLogin, ...props}) {
                  onChange={handleChange}
           />
         </div>
-        <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Login</button>
+        <button type="submit" className="btn btn-primary" >Login</button>
         <Link to='registration'><a> If you have not account, create one here!</a></Link>
-      </div>
+      </form>
     </div>
   );
 }
