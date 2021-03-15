@@ -84,6 +84,7 @@ export const getProfileDetails = async (user) => {
     });
     return data
   } catch (e) {
+    console.log(e);
     return false
   }
 };
@@ -170,7 +171,7 @@ export const sendReservationByWalker = async (walkerId, start, end, dogId) => {
       e.response.data.map(error => toast.error(error))
     } else if (e.response.status === 403) {
       toast.error("The walker can't accept your reservation because it isn't in her/his constraints");
-    } else if (e.response.status === 404){
+    } else if (e.response.status === 404) {
       toast.error('The walker can\'t accept your reservation because the during is greater than allowed')
     } else if (e.response.status === 406) {
       toast.error("The walker can't accept your reservation because he is busy at that time");
@@ -242,9 +243,9 @@ export const sendReservationToAll = async (ownerId, start, end, dogId) => {
   } catch (e) {
     if (e.response.status === 400) {
       toast.error("The data of the reservation is incorrect")
-    } else if (e.response.status === 403){
+    } else if (e.response.status === 403) {
       e.response.data.map(error => toast.error(error))
-    } else if (e.response.status === 406){
+    } else if (e.response.status === 406) {
       toast.error("There was some errors in the server")
     }
     return false
