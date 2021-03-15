@@ -114,8 +114,10 @@ export const createDog = async ({owner, name, size}) => {
         }
       }
     );
+    toast.success('Your dog has been created successfully');
     return data
   } catch (e) {
+    toast.error("There was some problems creating your dog");
     return e.response.data
   }
 };
@@ -146,9 +148,10 @@ export const deleteDog = async (id) => {
         }
       }
     );
+    toast.success('Your dog has been removed from our system. We will miss him :(');
     return data
   } catch (e) {
-    console.log('Error');
+    toast.error('There was some errors deleting your dog');
     return false
   }
 };
@@ -299,14 +302,14 @@ export const createConstraints = async (walkerId, start, end, sizesAllowed) => {
     toast.success('Your constraint has been created succesfully');
     return data
   } catch (e) {
-    toast.error('There was some problems accepting the reservation');
+    toast.error('There was some problems creating the constraints');
     return false
   }
 };
 
 export const getConstraints = async (walkerId) => {
   try {
-    const {data} = await axios.get(baseURL.urlAPI + 'walkers/constraints/' + walkerId,
+    const {data} = await axios.get(`${baseURL.urlAPI}walkers/constraints/${walkerId}`,
       {
         headers: {
           'Authorization': `${localStorage.getItem('Authorization')}`
@@ -322,7 +325,7 @@ export const getConstraints = async (walkerId) => {
 
 export const removeConstraints = async (id) => {
   try {
-    const {data} = await axios.delete(baseURL.urlAPI + 'constraints/' + id,
+    const {data} = await axios.delete(`${baseURL.urlAPI}constraints/${id}`,
       {
         headers: {
           'Authorization': `${localStorage.getItem('Authorization')}`
@@ -340,7 +343,7 @@ export const removeConstraints = async (id) => {
 export const cancelReservation = async (reservationId) => {
   try {
     console.log(reservationId);
-    const {data} = await axios.delete(baseURL.urlAPI + 'reservation/' + reservationId,
+    const {data} = await axios.delete(`${baseURL.urlAPI}reservation/${reservationId}`,
       {
         headers: {
           'Authorization': `${localStorage.getItem('Authorization')}`

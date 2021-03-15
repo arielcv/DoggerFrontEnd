@@ -76,6 +76,7 @@ function Reservations({user}) {
         </button>}
         {user.role === 'walker' && assigned && <button className='btn btn-outline-danger btn-actions'
                                                        disabled={confirmed}
+                                                       onClick={() => handleCancelReservation(reservationId)}
         >
           Reject
         </button>}
